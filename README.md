@@ -3,9 +3,10 @@
 Group Memebers:  
  - Sadhika Huria  
  - Nathan Fassler  
- - Junhao Xu (Peter) - Duong Ha Minh Khoa (Elton)
+ - Junhao Xu (Peter)  
+ - Duong Ha Minh Khoa (Elton)
 
-# Virtual Garden 🍃
+# Virtual Garden 🌱💻
 
 ## Project Overview
 
@@ -41,6 +42,6 @@ The **Virtual Garden** application allows users to upload photos of their plants
 ## Features
 
 - **AI-powered Plant Identification**: Upload photos to identify plants and learn more about them.
-- **Health Diagnostics**: Upload images of plants showing symptoms, such as yellow spots, for a health assessment.
-- **Personalized Care Recommendations**: Get tailored care instructions based on plant species and health.
-- **Weather-based Care Adjustments**: Receive localized weather data and forecasts to adjust plant care routines accordingly.
+- **Health Diagnostics**: Upload images of plants showing symptoms, such as yellow spots, for a health assessment and how to import the current health status.
+- **Personalized Care Recommendations**: Get detailed care instructions based on plant species and current health status.
+- **Weather-based Care Adjustments**: Receive local weather data and forecasts to adjust plant care routines according to it.
