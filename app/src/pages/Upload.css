@@ -1,0 +1,38 @@
+.upload-container {
+    text-align: center;
+}
+
+.upload-container input[type="file"] {
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+.upload-container .preview-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%
+}
+.upload-container button {
+    padding: 10px 20px;
+    background: #2d7a2d;
+    border: none;
+    font-size: 16px;
+}
+
+.weather-container {
+    background: #e8f5e9;
+    text-align: center;
+    padding: 20px;
+}
+
+.plant-info {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 15px;
+}
+
+
+.plant-info p {
+    margin: 10px 0;
+}
+
