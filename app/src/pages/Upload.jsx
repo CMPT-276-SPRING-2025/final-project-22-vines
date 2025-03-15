@@ -161,15 +161,25 @@ Please provide care recommendations considering these weather conditions.
             .then((responseText) => {  //recieve the data as json file, get the first candidates res from google gemini and then parse the text to display it
               try {
                 const responseData = JSON.parse(responseText); //parsaing
+
+                if (!responseData.candidates || !responseData.candidates[0].content.parts[0].text){
+                  throw new Error("Invalid response format");
+                }
+
                 let jsonString = responseData.candidates[0].content.parts[0].text;
+                
                 if (jsonString.startsWith("```json\n")) {
                   jsonString = jsonString.substring(7, jsonString.length - 3);
                 }
 
                 jsonString = jsonString.trim();
-                const plantData = JSON.parse(jsonString);
+                try {
+                  const plantData = JSON.parse(jsonString);
 
-                setPlantInfo(plantData);
+                  setPlantInfo(plantData);
+                } catch (jsonError){
+                  throw new Error("Plant not recognized");
+                }
                 
               } catch (error) {
                 alert("Error processing the response" + error);
