@@ -177,7 +177,7 @@ Please provide care recommendations considering these weather conditions.
 
             })
             .catch((error) => {
-              alert("Plant indetifying failed");
+              alert("Plant indentification failed");
               console.error("Fetch error", error);
             })
             .finally(() => {
