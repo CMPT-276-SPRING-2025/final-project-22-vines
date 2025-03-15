@@ -31,6 +31,7 @@ const Upload = () => {
   const [forecast, setForecast] = useState('Loading');
   const [plantInfo, setPlantInfo] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
 //fetch weather data using openweatherapi and geolocation
   const getWeatherData = () => {
@@ -62,6 +63,18 @@ const Upload = () => {
         reject(new Error("Cannot get user location"));
       }
     });
+  };
+
+  const ErrorPopup = ({ message, onClose}) => {
+    if (!message) return null;
+    return (    
+      <div className="error-popup-overlay">
+        <div className="error-popup">
+          <p>{message}</p>
+          <button onClick={onClose}>Close</button>
+        </div>
+      </div>
+    );
   };
 
   //handle the res from openweatherapi (get weather desc and temp)
@@ -178,16 +191,17 @@ Please provide care recommendations considering these weather conditions.
 
                   setPlantInfo(plantData);
                 } catch (jsonError){
-                  throw new Error("Plant not recognized");
+                  setErrorMessage("Plant not recognized");
                 }
                 
               } catch (error) {
-                alert("Error processing the response" + error);
+                setErrorMessage("Error processing the response: ${error.message}" );
+                console.error("Fetch error", error);
               }
 
             })
             .catch((error) => {
-              alert("Plant indentification failed");
+              setErrorMessage("Plant identification failed");
               console.error("Fetch error", error);
             })
             .finally(() => {
@@ -205,6 +219,7 @@ Please provide care recommendations considering these weather conditions.
   return (
     <div className="upload-page">
       <Navbar />
+
       <div className="upload-container">
         <h2>Upload Your Plant Image</h2>
         <input type="file" onChange={handleFileChange} accept="image/*" />
@@ -235,6 +250,7 @@ Please provide care recommendations considering these weather conditions.
           </p>
         </div>
       )}
+      <ErrorPopup message={errorMessage} onClose={() => setErrorMessage(null)} />
     </div>
   );
 };
