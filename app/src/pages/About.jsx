@@ -29,7 +29,9 @@ const About = () => {
                 make plant care easier for everyone.
                 </p>
             </div>
-          
+
+            {/* Add more sections or edit text as needed */}
+
         </div>
       </div>
     )
