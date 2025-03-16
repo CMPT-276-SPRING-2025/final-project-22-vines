@@ -4,25 +4,34 @@ import "./Upload.css";
 
 const GOOGLE_API_KEY = "AIzaSyDnw3wbTZXTCQdAran37oMm9Vo5X1fjxYQ";
 const GEMINI_API_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
-const OPENWEATHER_API_KEY = "5ee1fed90448749eccbf099844c6ecaf"; 
-
+const OPENWEATHER_API_KEY = "5ee1fed90448749eccbf099844c6ecaf";
 
 const BASE_PLANT_PROMPT = `
 Identify the plant species, analyze its health, and provide care recommendations.
+If the uploaded image does not appear to be of a plant, return JSON with an "error" field with an appropriate message (Plant not detected, this seems to be an image of..., please try again).
+
+Provide care tips separately based on:
+1. The current weather conditions.
+2. The upcoming weather forecast (4 days).
+
 Return JSON format:
 {
   "name": "Plant name",
   "scientificName": "Scientific name",
   "description": "Short description about the plant",
   "healthAnalysis": "Detect health issues, diseases, or deficiencies",
-  "careGuide": [
-      "1. [First care tip]",
-      "2. [Second care tip]",
-      "3. [Third care tip]"
+  "currentWeatherCareGuide": [
+      "1. [First care tip for current weather]",
+      "2. [Second care tip for current weather]",
+      "3. [...]"
+  ],
+  "forecastCareGuide": [
+      "1. [First care tip for forecast]",
+      "2. [Second care tip for forecast]",
+      "3. [...]"
   ]
 }
 `;
-
 
 const Upload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -31,8 +40,9 @@ const Upload = () => {
   const [forecast, setForecast] = useState('Loading');
   const [plantInfo, setPlantInfo] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-//fetch weather data using openweatherapi and geolocation
+  // Fetch weather data using OpenWeatherAPI and geolocation
   const getWeatherData = () => {
     return new Promise((resolve, reject) => {
       if (navigator.geolocation) {
@@ -40,39 +50,39 @@ const Upload = () => {
           (position) => {
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
+            const OPENWEATHER_API = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${OPENWEATHER_API_KEY}&units=metric`;
 
-            const weatherURL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${OPENWEATHER_API_KEY}&units=metric`;
-            const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${OPENWEATHER_API_KEY}&units=metric`;
-
-            Promise.all([
-              fetch(weatherURL).then(res => res.json()),
-              fetch(forecastURL).then(res => res.json())
-            ])
-            
-              .then(([weatherData, forecastData]) => {
-                resolve({ weather: weatherData, forecast: forecastData });
-              })
-              .catch((error) => reject(error));
-
+            fetch(OPENWEATHER_API)
+              .then(res => res.json())
+              .then(data => resolve(data))
+              .catch(error => reject(error));
           },
           (error) => reject(error)
         );
-
       } else {
         reject(new Error("Cannot get user location"));
       }
     });
   };
 
-  //handle the res from openweatherapi (get weather desc and temp)
+  // Handle the weather data response
   useEffect(() => {
     getWeatherData()
-      .then(({ weather, forecast }) => {
-        const currentSummary = `${weather.weather[0].description}, ${weather.main.temp}°C`;
+      .then((data) => {
+        const current = data.list[0];
+        const currentSummary = `Today: ${current.weather[0].description}, Temp: ${current.main.temp}°C, Humidity: ${current.main.humidity}%`;
         setCurrentWeather(currentSummary);
-        const forecastSummary = forecast.list.slice(0, 3)
-          .map(item => `${item.dt_txt}: ${item.weather[0].description}, ${item.main.temp}°C`)
-          .join("; ");
+
+        const forecastDays = data.list.slice(8, 40);
+        const dailyForecasts = [];
+        for (let i = 0; i < forecastDays.length; i += 8) {
+          const dayData = forecastDays[i];
+          if (dayData) {
+            const date = new Date(dayData.dt * 1000).toLocaleDateString();
+            dailyForecasts.push(`${date}: ${dayData.weather[0].description}, Temp: ${dayData.main.temp}°C, Humidity: ${dayData.main.humidity}%`);
+          }
+        }
+        const forecastSummary = dailyForecasts.join("; ");
         setForecast(forecastSummary);
       })
       .catch((error) => {
@@ -82,53 +92,77 @@ const Upload = () => {
       });
   }, []);
 
-  //handel the uplaoded image
+  // Handle the uploaded image file
   const handleFileChange = (event) => {
-    const file = event.target.files[0]; 
-    setSelectedFile(file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setPreviewUrl(e.target.result);
-      };
-      reader.readAsDataURL(file);
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const allowedTypes = [
+      "image/png",
+      "image/jpeg",
+      "image/jpg",
+      "image/webp",
+      "image/gif",
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      setErrorMessage("Unsupported file type. Please upload a PNG, JPG, JPEG, or WEBP image");
+      setSelectedFile(null);
+      setPreviewUrl('');
+      return;
     }
+
+    setErrorMessage(''); // Clear previous error if valid file
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setPreviewUrl(e.target.result);
+      setSelectedFile(file);
+    };
+    reader.readAsDataURL(file);
   };
 
-  //handle idenitfy button
+  // Handle identify button
   const handleIdentify = () => {
     if (!selectedFile) {
       alert("Please select an image");
       return;
     }
+
     setLoading(true);
+    setErrorMessage("");
+    setPlantInfo(null);
 
-
-    //get the weather data for the main prompt
+    // Get weather data for the main prompt
     getWeatherData()
-      .then(({ weather, forecast }) => {
+      .then((data) => {
+        const current = data.list[0];
+        const currentWeatherStr = `Current weather: ${current.weather[0].description}, Temp: ${current.main.temp}°C, Humidity: ${current.main.humidity}%`;
 
-        const currentWeatherStr = `Current weather: ${weather.weather[0].description}, Temp: ${weather.main.temp}°C.`;
-        const forecastSummary = forecast.list.slice(0, 3)
+        const forecastDays = data.list.slice(8, 40);
+        const dailyForecasts = [];
 
-          .map(item => `${item.dt_txt}: ${item.weather[0].description}, ${item.main.temp}°C`)
-          .join("; ");
+        for (let i = 0; i < forecastDays.length; i += 8) {
+          const dayData = forecastDays[i];
+          if (dayData) {
+            const date = new Date(dayData.dt * 1000).toLocaleDateString();
+            dailyForecasts.push(`${date}: ${dayData.weather[0].description}, Temp: ${dayData.main.temp}°C, Humidity: ${dayData.main.humidity}%`);
+          }
+        }
+        const forecastSummary = dailyForecasts.join("\n");
 
-        //weather info for the prompt
         const weatherInfo = `
 Additional weather details:
 ${currentWeatherStr}
-Forecast: ${forecastSummary}
+Forecast for next 4 days: ${forecastSummary}
 Please provide care recommendations considering these weather conditions.
         `;
 
-
         const fullPrompt = BASE_PLANT_PROMPT + weatherInfo;
-
 
         const reader = new FileReader();
         reader.onload = (e) => {
-          const base64Image = e.target.result.split(",")[1]; //get the "encoded" iamge data
+          const base64Image = e.target.result.split(",")[1];
 
           const payload = {
             contents: [
@@ -146,43 +180,47 @@ Please provide care recommendations considering these weather conditions.
             ],
           };
 
-          //post the prompt to google gemini
-          fetch(`${GEMINI_API_ENDPOINT}?key=${GOOGLE_API_KEY}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          })
-          
-            .then((response) => {
-              if (!response.ok) throw new Error("HTTP error! Status: " + response.status);
-              return response.text();
+          try {
+            fetch(`${GEMINI_API_ENDPOINT}?key=${GOOGLE_API_KEY}`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
             })
-            
-            .then((responseText) => {  //recieve the data as json file, get the first candidates res from google gemini and then parse the text to display it
-              try {
-                const responseData = JSON.parse(responseText); //parsaing
-                let jsonString = responseData.candidates[0].content.parts[0].text;
-                if (jsonString.startsWith("```json\n")) {
-                  jsonString = jsonString.substring(7, jsonString.length - 3);
+              .then((response) => {
+                if (!response.ok) throw new Error("HTTP error! Status: " + response.status);
+                return response.text();
+              })
+              .then((responseText) => {
+                try {
+                  const responseData = JSON.parse(responseText);
+                  let jsonString = responseData.candidates[0].content.parts[0].text;
+                  if (jsonString.startsWith("```json\n")) {
+                    jsonString = jsonString.substring(7, jsonString.length - 3);
+                  }
+                  jsonString = jsonString.trim();
+                  const plantData = JSON.parse(jsonString);
+
+                  if (plantData.error) {
+                    setErrorMessage(plantData.error);
+                  } else {
+                    setPlantInfo(plantData);
+                  }
+                } catch (error) {
+                  alert("Error processing the response: " + error);
                 }
-
-                jsonString = jsonString.trim();
-                const plantData = JSON.parse(jsonString);
-
-                setPlantInfo(plantData);
-                
-              } catch (error) {
-                alert("Error processing the response" + error);
-              }
-
-            })
-            .catch((error) => {
-              alert("Plant indentification failed");
-              console.error("Fetch error", error);
-            })
-            .finally(() => {
-              setLoading(false);
-            });
+              })
+              .catch((error) => {
+                alert("Plant identifying failed");
+                console.error("Fetch error", error);
+              })
+              .finally(() => {
+                setLoading(false);
+              });
+          } catch (error) {
+            alert("Error during Google Gemini API request: " + error.message);
+            console.error("Google Gemini error:", error);
+            setLoading(false);
+          }
         };
         reader.readAsDataURL(selectedFile);
       })
@@ -190,6 +228,19 @@ Please provide care recommendations considering these weather conditions.
         alert("Failed to get weather data: " + error.message);
         setLoading(false);
       });
+  };
+
+  // Error popup 
+  const ErrorPopup = ({ message, onClose }) => {
+    if (!message) return null;
+    return (
+      <div className="error-popup-overlay">
+        <div className="error-popup">
+          <p>{message}</p>
+          <button onClick={onClose}>Close</button>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -217,14 +268,23 @@ Please provide care recommendations considering these weather conditions.
           <p><strong>Scientific Name:</strong> {plantInfo.scientificName || "N/A"}</p>
           <p><strong>Description:</strong> {plantInfo.description || "N/A"}</p>
           <p><strong>Health Analysis:</strong> {plantInfo.healthAnalysis || "N/A"}</p>
-          <h3><strong>Care Reccomendation:</strong></h3>
+          <h3><strong>Care Recommendation:</strong></h3>
+          <h4>Current Weather Care:</h4>
           <p>
-            {Array.isArray(plantInfo.careGuide)
-              ? <span dangerouslySetInnerHTML={{ __html: "<br>" + plantInfo.careGuide.join("<br>") }} />
-              : plantInfo.careGuide || "N/A"}
+            {Array.isArray(plantInfo.currentWeatherCareGuide)
+              ? <span dangerouslySetInnerHTML={{ __html: "<br>" + plantInfo.currentWeatherCareGuide.join("<br>") }} />
+              : plantInfo.currentWeatherCareGuide || "N/A"}
+          </p>
+          <h4>Forecast-Based Care:</h4>
+          <p>
+            {Array.isArray(plantInfo.forecastCareGuide)
+              ? <span dangerouslySetInnerHTML={{ __html: "<br>" + plantInfo.forecastCareGuide.join("<br>") }} />
+              : plantInfo.forecastCareGuide || "N/A"}
           </p>
         </div>
       )}
+
+      <ErrorPopup message={errorMessage} onClose={() => setErrorMessage('')} />
     </div>
   );
 };
