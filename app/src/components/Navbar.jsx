@@ -7,10 +7,10 @@ const Navbar = () => {
         <h1 className='w-full text-3xl font-bold'><Link to="/">Virtual Garden</Link></h1>
         <ul className='flex' >
             <li className='p-4 transition-all duration-1000 text-black hover:text-green-600'>
-              <Link to="/about">About</Link>
+              <Link to="/About">About</Link>
             </li> {/* Link to About */}
             <li className='p-4 transition-all duration-1000 text-black hover:text-green-600'>
-              FAQ
+              <Link to="/FAQ">FAQ</Link> {/* Link to FAQ */}
             </li>
             <li className='p-4 transition-all duration-1000 text-black hover:text-green-600'>
               Contact
