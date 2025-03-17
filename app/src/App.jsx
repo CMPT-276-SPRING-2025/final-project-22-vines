@@ -6,17 +6,21 @@ import FAQ from './pages/FAQ';
 
 // Only modify to include more pages
 function App() {
-
   return (
-    <Router>
+    <Router
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+    >
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/Upload" element={<Upload />} />
-        <Route path="/About" element={<About />} />  {/* Add About route */}
-        <Route path="/FAQ" element={<FAQ />} /> {/* Add FAQ route */}
+        <Route path="/About" element={<About />} />
+        <Route path="/FAQ" element={<FAQ />} />
       </Routes>
     </Router>
   )
 }
 
-export default App
+export default App;
