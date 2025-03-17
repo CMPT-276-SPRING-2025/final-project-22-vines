@@ -3,8 +3,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from '../src/App';
 
-// Use Vitest's vi.mock to stub the pages that App renders.
-// (App.jsx already wraps itself with a Router that uses future flags.)
 vi.mock('../src/pages/Home', () => ({
   default: () => <div>Home Page</div>,
 }));
