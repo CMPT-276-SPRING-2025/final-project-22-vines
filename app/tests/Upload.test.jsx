@@ -3,6 +3,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import Upload from '../src/pages/Upload';
 import '@testing-library/jest-dom';
+import { MemoryRouter } from 'react-router-dom';
 
 const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
@@ -90,7 +91,10 @@ afterAll(() => {
 describe('Upload Component', () => {
   test('renders file input and identify button', async () => {
     await act(async () => {
-      render(<Upload />);
+      render(
+      <MemoryRouter>
+        <Upload />
+      </MemoryRouter>);
     });
     expect(screen.getByText('Upload Your Plant Image')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /identify/i })).toBeInTheDocument();
@@ -98,7 +102,10 @@ describe('Upload Component', () => {
 
   test('shows error for unsupported file type', async () => {
     await act(async () => {
-      render(<Upload />);
+      render(
+      <MemoryRouter>
+        <Upload />
+      </MemoryRouter>);
     });
     const input = document.querySelector('input[type="file"]');
     const file = new File(['dummy content'], 'example.txt', { type: 'text/plain' });
@@ -110,7 +117,10 @@ describe('Upload Component', () => {
 
   test('processes a valid image file and displays plant details', async () => {
     await act(async () => {
-      render(<Upload />);
+      render(
+      <MemoryRouter>
+        <Upload />
+      </MemoryRouter>);
     });
     const input = document.querySelector('input[type="file"]');
     const file = new File(['dummy content'], 'example.png', { type: 'image/png' });

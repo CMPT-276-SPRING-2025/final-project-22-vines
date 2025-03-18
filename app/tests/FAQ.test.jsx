@@ -10,7 +10,7 @@ vi.mock('../src/components/Navbar', () => ({
 
 describe('FAQ Component', () => {
   test('renders FAQ questions and toggles answers', () => {
-    render(<FAQ />);
+    render(<MemoryRouter><FAQ /></MemoryRouter>);
 
     // verify FAQ
     expect(screen.getByText('Question 1?')).toBeInTheDocument();
