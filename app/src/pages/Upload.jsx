@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import "./Upload.css";
-import Footer from '../components/Footer';
 
-const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
+const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_ENDPOINT;
 const GEMINI_API_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
-const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
+const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_ENDPOINT;
 
 const BASE_PLANT_PROMPT = `
 Identify the plant species, analyze its health, and provide care recommendations.
@@ -286,7 +285,6 @@ Please provide care recommendations considering these weather conditions.
       )}
 
       <ErrorPopup message={errorMessage} onClose={() => setErrorMessage('')} />
-      <Footer />
     </div>
   );
 };

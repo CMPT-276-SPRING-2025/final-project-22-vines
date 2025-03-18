@@ -34,7 +34,6 @@ const About = () => {
             {/* Add more sections or edit text as needed */}
 
         </div>
-        <Footer />
       </div>
     )
   }

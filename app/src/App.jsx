@@ -3,6 +3,7 @@ import Home from './pages/Home'
 import Upload from './pages/Upload'
 import About from './pages/About';
 import FAQ from './pages/FAQ';
+import Footer from './components/Footer';
 
 // Only modify to include more pages
 function App() {
@@ -13,12 +14,17 @@ function App() {
         v7_relativeSplatPath: true,
       }}
     >
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/Upload" element={<Upload />} />
-        <Route path="/About" element={<About />} />
-        <Route path="/FAQ" element={<FAQ />} />
-      </Routes>
+      <div className="flex flex-col min-h-screen">
+        <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/Upload" element={<Upload />} />
+          <Route path="/About" element={<About />} />
+          <Route path="/FAQ" element={<FAQ />} />
+        </Routes>
+        </main>
+        <Footer />
+      </div>
     </Router>
   )
 }
