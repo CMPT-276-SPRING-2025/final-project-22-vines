@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import "./Upload.css";
+import Footer from '../components/Footer';
 
 const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 const GEMINI_API_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
@@ -285,6 +286,7 @@ Please provide care recommendations considering these weather conditions.
       )}
 
       <ErrorPopup message={errorMessage} onClose={() => setErrorMessage('')} />
+      <Footer />
     </div>
   );
 };
