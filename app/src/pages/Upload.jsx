@@ -9,118 +9,43 @@ const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
 
 const BASE_PLANT_PROMPT = `
 Identify the plant species, analyze its health, and provide care recommendations.
-If the uploaded image does not appear to be of a plant, return JSON with an "error" field with an appropriate message (Plant not detected, this seems to be an image of..., please try again).
+If the image is not of a plant, return JSON with an "error" field.
 
-Also provide a "healthOverview" field in JSON with:
-{
-  "overallHealth": 0-100 (numeric),
-  "wateringNeeds": 0-100 (numeric),
-  "lightExposure": 0-100 (numeric),
-  "temperatureSuitability": "text describing temperature (e.g. 'Slightly Too Cold')",
-  "humiditySuitability": "text describing humidity (e.g. 'Slightly Too Dry')"
-}
-
-Include "potentialHealthConditions" as an array of objects. Each object has:
-{
-  "title": "e.g. Browning or Crispy Leaf Edges",
-  "possibleCauses": [ "Cause 1", "Cause 2" ],
-  "solutions": [ "Solution 1", "Solution 2" ]
-}
-
-Provide a "plantCare" object with sections:
-{
-  "watering": [ "Tip1", "Tip2" ],
-  "light": [ "Tip1", "Tip2" ],
-  "humidity": [ "Tip1", "Tip2" ],
-  "temperature": [ "Tip1", "Tip2" ],
-  "fertilization": [ "Tip1", "Tip2" ],
-  "soil": [ "Tip1", "Tip2" ],
-  "forecastCare": [
-    {
-      "day": "e.g. Day 1",
-      "tips": [
-        "Tip for that forecast day",
-        "Another tip"
-      ]
-    },
-    {
-      "day": "Day 2",
-      "tips": [
-        "..."
-      ]
-    }
-  ]
-}
-
-Return JSON format:
+Return JSON with these fields:
 {
   "name": "Plant name",
   "scientificName": "Scientific name",
-  "description": "Short description about the plant",
-  "healthAnalysis": "Detect health issues, diseases, or deficiencies",
+  "description": "Short description",
+  "healthAnalysis": "Health issues/diseases",
   "healthOverview": {
-    "overallHealth": 60,
-    "wateringNeeds": 40,
-    "lightExposure": 90,
-    "temperatureSuitability": "Slightly Too Cold",
-    "humiditySuitability": "Slightly Too Dry"
+    "overallHealth": 0-100 numeric,
+    "wateringNeeds": 0-100 numeric,
+    "lightExposure": 0-100 numeric,
+    "temperatureSuitability": "e.g. 'Slightly Too Cold'",
+    "humiditySuitability": "e.g. 'Slightly Too Dry'"
   },
   "potentialHealthConditions": [
     {
-      "title": "Browning or Crispy Leaf Edges",
-      "possibleCauses": [
-        "Underwatering: The soil may be drying out too much between waterings.",
-        "Low Humidity: The plant needs 50-70% humidity; current humidity is too low."
-      ],
-      "solutions": [
-        "Increase humidity with a humidifier, misting, or pebble tray.",
-        "Ensure the soil is lightly moist but not soggy."
-      ]
+      "title": "Short problem description",
+      "possibleCauses": ["cause 1", "cause 2"],
+      "solutions": ["solution 1", "solution 2"]
     }
   ],
   "plantCare": {
-    "watering": [
-      "Water when the top 2-3 cm of soil feels dry.",
-      "Avoid overwatering to prevent root rot."
-    ],
-    "light": [
-      "Provide bright, indirect light.",
-      "Avoid direct sunlight to prevent leaf burn."
-    ],
-    "humidity": [
-      "Maintain humidity around 50-70%.",
-      "Increase humidity with misting or a humidifier if needed."
-    ],
-    "temperature": [
-      "Keep between 18-26°C.",
-      "Avoid cold drafts."
-    ],
-    "fertilization": [
-      "Feed every 2-4 weeks during spring and summer."
-    ],
-    "soil": [
-      "Use well-draining, airy soil (mix of peat, perlite, and compost).",
-      "Repot every 1-2 years."
-    ],
+    "watering": ["Tip1", "Tip2"],
+    "light": ["Tip1", "Tip2"],
+    "humidity": ["Tip1", "Tip2"],
+    "temperature": ["Tip1", "Tip2"],
+    "fertilization": ["Tip1", "Tip2"],
+    "soil": ["Tip1", "Tip2"],
     "forecastCare": [
-      {
-        "day": "Day 1",
-        "tips": [
-          "Adjust watering based on forecasted rain.",
-          "Protect from strong winds."
-        ]
-      },
-      {
-        "day": "Day 2",
-        "tips": [
-          "Ensure adequate light exposure if overcast.",
-          "Monitor temperature fluctuations."
-        ]
-      }
+      { "day": "Day 1", "tips": ["Tip for that day", "Another tip"] },
+      { "day": "Day 2", "tips": ["..."] }
     ]
   }
 }
 `;
+
 
 const Upload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -475,7 +400,7 @@ Please provide care recommendations considering these weather conditions.
               {/*soil*/}
               {Array.isArray(plantInfo.plantCare.soil) && plantInfo.plantCare.soil.length > 0 && (
                 <div className="care-item">
-                  <h4>🪴 Soil</h4>
+                  <h4>Soil</h4>
                   <ul>
                     {plantInfo.plantCare.soil.map((tip, i) => <li key={i}>{tip}</li>)}
                   </ul>
@@ -484,7 +409,7 @@ Please provide care recommendations considering these weather conditions.
               {/*forecast tipsa*/}
               {Array.isArray(plantInfo.plantCare.forecastCare) && plantInfo.plantCare.forecastCare.length > 0 && (
                 <div className="care-item">
-                  <h4>📅 Forecast-Based Care</h4>
+                  <h4>Forecast-Based Care</h4>
                   {plantInfo.plantCare.forecastCare.map((fc, idx) => (
                     <div key={idx} className="forecast-care-item">
                       <strong>{fc.day}</strong>
