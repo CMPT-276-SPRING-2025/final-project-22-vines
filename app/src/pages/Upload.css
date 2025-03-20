@@ -68,3 +68,40 @@
     border-radius: 5px;
   }
   
+  .health-overview {
+    border: 2px solid #ddd;
+    padding: 10px;
+    margin-top: 20px;
+    background: #fefefe;
+  }
+  
+  
+  .progress-bar {
+    margin-bottom: 15px;
+  }
+  
+  .progress-bar label {
+    font-weight: bold;
+  }
+  
+  .progress {
+    background: #e0e0e0;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 20px;
+    width: 100%;
+  }
+  
+  .progress-fill {
+    background: #8bc34a;
+    height: 100%;
+    line-height: 20px;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+  }
+  
+  .suitability p {
+    margin: 5px 0;
+  }
+  

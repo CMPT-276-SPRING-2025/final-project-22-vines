@@ -1,10 +1,10 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Home from './pages/Home'
-import Upload from './pages/Upload'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Upload from './pages/Upload';
 import About from './pages/About';
 import FAQ from './pages/FAQ';
+import Footer from './components/Footer';
 
-// Only modify to include more pages
 function App() {
   return (
     <Router
@@ -19,8 +19,9 @@ function App() {
         <Route path="/About" element={<About />} />
         <Route path="/FAQ" element={<FAQ />} />
       </Routes>
+      <Footer />
     </Router>
-  )
+  );
 }
 
 export default App;
