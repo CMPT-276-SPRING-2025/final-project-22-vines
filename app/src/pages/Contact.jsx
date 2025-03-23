@@ -39,8 +39,8 @@ const ContactPage = () => {
     return (
         <div>
             <Navbar />
-            <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-10">
-                <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
+            <div className="min-h-screen flex flex-col items-center justify-start pt-20 bg-gray-100 py-10">
+                <div className="bg-white p-8 rounded-lg shadow-lg max-w-4xl w-full">
                     <h2 className="text-2xl font-bold text-center mb-4">Contact Us</h2>
                     <p className="text-gray-600 text-center mb-6">Any questions or remarks? Just write us a message!</p>
 
@@ -111,6 +111,7 @@ const ContactPage = () => {
                         <h3 className="font-bold text-lg mb-2">User 3</h3>
                         <p className="text-gray-600">User review...</p>
                     </div>
+                    {/* Add or edit user reviews as needed */}
                 </div>
             </div>
         </div>
