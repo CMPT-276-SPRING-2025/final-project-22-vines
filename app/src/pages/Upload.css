@@ -1,107 +1,480 @@
+/* Upload.css */
+.upload-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
 .upload-container {
-    text-align: center;
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.upload-container h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
 }
 
 .upload-container input[type="file"] {
-    border: 1px solid #ccc;
-    padding: 5px;
+  margin: 15px 0;
+  width: 100%;
 }
-.upload-container .preview-image {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%
+
+.preview-image {
+  max-width: 100%;
+  max-height: 400px;
+  margin: 0 auto 20px;
+  display: block;
+  border-radius: 8px;
 }
+
 .upload-container button {
-    padding: 10px 20px;
-    background: #2d7a2d;
-    border: none;
-    font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.weather-container {
-    background: #e8f5e9;
-    text-align: center;
-    padding: 20px;
+.upload-container button:hover {
+  background-color: #3e8e41;
 }
 
+.upload-container button:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+/* Progress bar for loading */
+.analyzing-container {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.analyzing-text {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.analyzing-progress {
+  height: 16px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.analyzing-progress-fill {
+  height: 100%;
+  background-color: #4CAF50;
+  border-radius: 8px;
+  text-align: right;
+  color: white;
+  font-size: 12px;
+  line-height: 16px;
+  padding-right: 8px;
+  transition: width 0.5s;
+}
+
+/* Plant Info Section */
 .plant-info {
-    background: #fff;
-    border: 1px solid #ddd;
-    padding: 15px;
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-
-.plant-info p {
-    margin: 10px 0;
+.plant-info h2 {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 5px;
+  color: #333;
 }
 
+.plant-info h3 {
+  font-size: 18px;
+  margin: 20px 0 15px;
+  color: #333;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 10px;
+}
+
+.scientific-name {
+  text-align: center;
+  font-style: italic;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+/* Health Overview */
+.health-overview {
+  margin: 10px 0 25px;
+  padding: 15px 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.progress-bar {
+  margin-bottom: 15px;
+}
+
+.progress-bar label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.progress {
+  height: 16px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 8px;
+  text-align: right;
+  color: white;
+  font-size: 12px;
+  line-height: 16px;
+  padding-right: 8px;
+}
+
+.progress-fill-overall {
+  background-color: #8BC34A;
+}
+
+.progress-fill-watering {
+  background-color: #4CAF50;
+}
+
+.progress-fill-light {
+  background-color: #FFC107;
+}
+
+.suitability {
+  margin-top: 15px;
+}
+
+.suitability p {
+  margin: 8px 0;
+}
+
+/* Potential Health Conditions */
+.potential-health-conditions {
+  background: #fff;
+  padding: 15px 20px;
+  margin-bottom: 25px;
+  border-radius: 8px;
+  border: 1px solid #eaeaea;
+}
+
+.potential-health-conditions h3 {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.health-condition-item {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.health-condition-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.health-condition-title {
+  font-weight: bold;
+  color: #e65100;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.health-condition-title:before {
+  content: "⚠️";
+  margin-right: 8px;
+}
+
+.health-condition-item h4 {
+  margin: 15px 0 8px;
+  font-size: 15px;
+}
+
+.health-condition-item ul {
+  margin: 5px 0 10px 20px;
+}
+
+.health-condition-item li {
+  margin-bottom: 6px;
+}
+
+/* Plant Care */
+.plant-care {
+  margin-top: 25px;
+}
+
+.care-item {
+  margin-bottom: 25px;
+}
+
+.care-item h4 {
+  margin: 15px 0 10px;
+  font-size: 16px;
+  color: #2E7D32;
+  display: flex;
+  align-items: center;
+}
+
+.care-item h4:before {
+  margin-right: 8px;
+}
+
+.care-item h4.watering:before {
+  content: "💧";
+}
+
+.care-item h4.light:before {
+  content: "☀️";
+}
+
+.care-item h4.humidity:before {
+  content: "💦";
+}
+
+.care-item h4.temperature:before {
+  content: "🌡️";
+}
+
+.care-item h4.fertilization:before {
+  content: "✓";
+}
+
+.care-item h4.soil:before {
+  content: "🌱";
+}
+
+.care-item ul {
+  margin-left: 25px;
+}
+
+.care-item li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+/* Weather Section */
+.weather-container {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.weather-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: #333;
+}
+
+/* Today's Weather */
+.todays-weather {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.weather-date {
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.weather-icon {
+  font-size: 50px;
+  margin: 15px 0;
+}
+
+.weather-condition {
+  margin-bottom: 10px;
+}
+
+.weather-temp, .weather-humidity {
+  text-align: center;
+  padding: 15px;
+}
+
+.weather-temp h3, .weather-humidity h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.temp-value, .humidity-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.temp-label, .humidity-label {
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.weather-details {
+  margin-top: 15px;
+}
+
+.weather-details p {
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+}
+
+.weather-details p:before {
+  content: "•";
+  margin-right: 8px;
+  color: #4CAF50;
+}
+
+/* Weather Forecast */
+.weather-forecast {
+  margin-top: 30px;
+}
+
+.weather-forecast h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.forecast-days {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.forecast-day {
+  flex: 1;
+  padding: 10px;
+  min-width: 0;
+}
+
+.forecast-day-name {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.forecast-icon {
+  font-size: 30px;
+  margin: 10px 0;
+}
+
+.forecast-temp {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.forecast-humidity {
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.forecast-notes {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* Button at bottom */
+.analyze-another-btn {
+  display: block;
+  background-color: #4CAF50;
+  color: white;
+  padding: 15px 30px;
+  text-align: center;
+  border-radius: 8px;
+  margin: 30px auto;
+  max-width: 400px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.analyze-another-btn:hover {
+  background-color: #3e8e41;
+}
+
+/* Error popup */
 .error-popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  .error-popup {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    min-width: 300px;
-  }
-  
-  .error-popup button {
-    margin-top: 10px;
-    padding: 8px 12px;
-    background: red;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .health-overview {
-    border: 2px solid #ddd;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.error-popup {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 80%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.error-popup p {
+  margin-bottom: 15px;
+  color: #d32f2f;
+}
+
+.error-popup button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .upload-page {
     padding: 10px;
-    margin-top: 20px;
-    background: #fefefe;
   }
   
+  .upload-container, .plant-info, .weather-container {
+    padding: 20px;
+  }
   
-  .progress-bar {
+  .forecast-days {
+    flex-direction: column;
+  }
+  
+  .forecast-day {
     margin-bottom: 15px;
   }
-  
-  .progress-bar label {
-    font-weight: bold;
-  }
-  
-  .progress {
-    background: #e0e0e0;
-    border-radius: 20px;
-    overflow: hidden;
-    height: 20px;
-    width: 100%;
-  }
-  
-  .progress-fill {
-    background: #8bc34a;
-    height: 100%;
-    line-height: 20px;
-    color: #fff;
-    text-align: center;
-    white-space: nowrap;
-  }
-  
-  .suitability p {
-    margin: 5px 0;
-  }
-  
+}
