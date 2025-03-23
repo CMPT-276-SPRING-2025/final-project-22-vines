@@ -13,7 +13,7 @@ const Navbar = () => {
               <Link to="/FAQ">FAQ</Link> {/* Link to FAQ */}
             </li>
             <li className='p-4 transition-all duration-1000 text-black hover:text-green-600'>
-              Contact
+              <Link to="/Contact">Contact</Link> {/* Link to FAQ */}
             </li>
         </ul>
         <Link to="/Upload"><button className='bg-green-600 text-white w-[150px] rounded-md font-medium my-6 mx-auto px-6 py-3 cursor-pointer hover:bg-green-700 transition duration-300'>Analyze Plant</button></Link>
