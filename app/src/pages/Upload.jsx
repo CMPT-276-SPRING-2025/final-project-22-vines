@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import "./Upload.css";
 
-const GOOGLE_API_KEY = "AIzaSyCY62oUKFEbAmaIYcJFRSpCQSuFc0HwZD0";
+const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 const GEMINI_API_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
-const OPENWEATHER_API_KEY = "9fcabdd6408e607799b331b21cda6ef7";
+const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
 
 
 const BASE_PLANT_PROMPT = `
