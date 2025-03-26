@@ -50,12 +50,12 @@ Return JSON with these fields:
 const Upload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [currentWeather, setCurrentWeather] = useState(null);
   const [forecast, setForecast] = useState([]);
   const [plantInfo, setPlantInfo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
-  const [errorMessage, setErrorMessage] = useState('');
 
   //fetch weather data using OpenWeatherAPI and geolocation
   const getWeatherData = () => {
@@ -165,6 +165,21 @@ const Upload = () => {
       setSelectedFile(file);
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      const event = { target: { files: [file] } };
+      handleFileChange(event);
+    }
   };
 
   //handle identify button
@@ -313,13 +328,48 @@ Please provide care recommendations considering these weather conditions.
       
       {!loading && !plantInfo && (
         <div className="upload-container">
-          <h2>Upload Your Plant Image</h2>
-          <input type="file" onChange={handleFileChange} accept="image/*" />
-          {previewUrl && <img src={previewUrl} alt="Preview" className="preview-image" />}
-          <button onClick={handleIdentify} disabled={loading}>
-            {loading ? "Identifying" : "Identify Plant"}
-          </button>
+        <h1>Digital Garden</h1>
+        <div 
+          className={`upload-area ${previewUrl ? 'with-preview' : ''}`}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+        >
+          {!previewUrl ? (
+            <>
+              <div className="upload-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 13h6l-3 3z"/>
+                  <path d="M20 17V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2zM9 13l3 3 3-3H9zm8-7l-3-3H6l3 3h8z"/>
+                </svg>
+              </div>
+              <p>Drag and drop photo or click to browse</p>
+              <input 
+                type="file" 
+                className="file-input"
+                onChange={handleFileChange} 
+                accept="image/*" 
+              />
+            </>
+          ) : (
+            <img 
+              src={previewUrl} 
+              alt="Preview" 
+              className="preview-image" 
+            />
+          )}
         </div>
+        {previewUrl && (
+          <div className="upload-actions">
+            <button 
+              className="analyze-btn" 
+              onClick={handleIdentify}
+              disabled={!selectedFile}
+            >
+              Analyze Plant
+            </button>
+          </div>
+        )}
+      </div>
       )}
       
       {loading && (
