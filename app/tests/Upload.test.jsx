@@ -11,19 +11,21 @@ vi.mock('../src/components/Navbar', () => ({
   default: () => <div>Navbar</div>,
 }));
 
-// Mock navigator geolocation so that getCurrentPosition succeeds
 const mockGeolocation = {
-  getCurrentPosition: (success) =>
-    success({
-      coords: { latitude: 0, longitude: 0 },
-    }),
+  getCurrentPosition: (success) => {
+      success({
+          coords: { latitude: 0, longitude: 0 },
+      });
+  },
 };
 global.navigator.geolocation = mockGeolocation;
 
+const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+
 //test api call
-global.fetch = vi.fn((url) => {
-  //test openweather api
-  if (url.includes('openweathermap.org') && url.includes(OPENWEATHER_API_KEY)) {
+global.fetch = vi.fn((url, options) => {
+  if (url.includes('api.openweathermap.org/data/2.5/forecast') && url.includes(OPENWEATHER_API_KEY)) {
+      //test openweather api
     return Promise.resolve({
       json: () =>
         Promise.resolve({
@@ -33,19 +35,21 @@ global.fetch = vi.fn((url) => {
               main: { temp: 20, humidity: 50 },
               weather: [{ description: 'clear sky' }],
             },
-            ...Array(40).fill({
-              dt: Date.now() / 1000,
+            ...Array(49).fill({
+              dt: Date.now() / 1000 + 3600,
               main: { temp: 22, humidity: 55 },
               weather: [{ description: 'cloudy' }],
             }),
           ],
+          city: { name: 'MockCity', coord: { lat: 0, lon: 0 } },
         }),
     });
   }
   // gemini api
-  if (url.includes('generativelanguage.googleapis.com') && url.includes(GOOGLE_API_KEY)) {
+  if (url.includes('generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent') && url.includes(GOOGLE_API_KEY) && options?.method === 'POST') {
     return Promise.resolve({
       ok: true,
+      status: 200,
       text: () =>
         Promise.resolve(
           JSON.stringify({
@@ -54,86 +58,110 @@ global.fetch = vi.fn((url) => {
                 content: {
                   parts: [
                     {
-                      text:
-                        '{"name": "Rose", "scientificName": "Rosa", "description": "A red rose", "healthAnalysis": "Healthy", "currentWeatherCareGuide": ["Water daily"], "forecastCareGuide": ["Water sparingly"]}',
+                      text: JSON.stringify({
+                        name: "Rose",
+                        scientificName: "Rosa",
+                        description: "A red rose",
+                        healthAnalysis: "Healthy",
+                      }),
                     },
                   ],
+                  role: "model",
                 },
+                finishReason: "STOP",
+                index: 0,
+                safetyRatings: [],
               },
             ],
           })
         ),
     });
   }
-  return Promise.reject(new Error('Unknown URL'));
+
+  return Promise.reject(new Error(`Unexpected fetch call in mock: ${url} ${options?.method || 'GET'}`));
 });
 
-// test file reading
 const originalFileReader = window.FileReader;
 beforeAll(() => {
   class MockFileReader {
-    constructor() {
-      this.onload = null;
-    }
+    onload = null;
+    onerror = null;
     readAsDataURL(file) {
-      if (this.onload) {
-        this.onload({ target: { result: 'data:image/png;base64,dummybase64' } });
-      }
+        setTimeout(() => {
+            if (this.onload) {
+                this.onload({ target: { result: 'data:image/png;base64,dummybase64' } });
+            }
+        }, 10);
     }
   }
   window.FileReader = MockFileReader;
 });
+
 afterAll(() => {
   window.FileReader = originalFileReader;
+  alertSpy.mockRestore();
+  vi.restoreAllMocks();
 });
 
+beforeEach(() => {
+    vi.mocked(fetch).mockClear();
+    alertSpy.mockClear();
+})
+
 describe('Upload Component', () => {
-  test('renders file input and identify button', async () => {
-    await act(async () => {
-      render(<Upload />);
-    });
-    expect(screen.getByText('Upload Your Plant Image')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /identify/i })).toBeInTheDocument();
+
+  test('renders file input and initial text', async () => {
+    render(<Upload />);
+    expect(await screen.findByText(/Upload Your Plant Image/i)).toBeInTheDocument();
+    expect(screen.getByText(/Drag and drop photo or click/i)).toBeInTheDocument();
+    expect(document.querySelector('input[type="file"]')).toBeInTheDocument();
   });
 
   test('shows error for unsupported file type', async () => {
-    await act(async () => {
-      render(<Upload />);
-    });
+    render(<Upload />);
     const input = document.querySelector('input[type="file"]');
     const file = new File(['dummy content'], 'example.txt', { type: 'text/plain' });
-    await act(async () => {
-      fireEvent.change(input, { target: { files: [file] } });
+    fireEvent.change(input, { target: { files: [file] } });
+
+    //used waitFor to wrap the assertions, allowing time for the popup to render
+    await waitFor(() => {
+        expect(screen.getByText(/Unsupported file type/i)).toBeInTheDocument();
+        expect(screen.getByText(/Please upload one of these image types/i)).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Close/i})).toBeInTheDocument();
     });
-    expect(screen.getByText(/unsupported file type/i)).toBeInTheDocument();
+
   });
 
   test('processes a valid image file and displays plant details', async () => {
-  await act(async () => {
     render(<Upload />);
-  });
-  const input = document.querySelector('input[type="file"]');
-  const file = new File(['dummy content'], 'example.png', { type: 'image/png' });
-  await act(async () => {
+    const input = document.querySelector('input[type="file"]');
+    const file = new File(['dummy content'], 'example.png', { type: 'image/png' });
     fireEvent.change(input, { target: { files: [file] } });
-  });
 
-  // wait for image to be rendered
-  await waitFor(() => {
-    expect(document.querySelector('img.preview-image')).toBeInTheDocument();
-  });
+    await waitFor(() => {
+        expect(screen.getByAltText('Preview')).toBeInTheDocument();
+    });
 
-  // identify
-  const button = screen.getByRole('button', { name: /identify/i });
-  await act(async () => {
+    const button = screen.getByRole('button', { name: /Analyze Plant/i });
     fireEvent.click(button);
-  });
+
+     await waitFor(() => {
+        expect(fetch).toHaveBeenCalledWith(
+            expect.stringContaining('api.openweathermap.org')
+        );
+        expect(fetch).toHaveBeenCalledWith(
+            expect.stringContaining('gemini-2.0-flash:generateContent'),
+            expect.objectContaining({ method: 'POST' })
+        );
+     });
 
   // wait for plant detail by gemini
-  await waitFor(() => {
-    const roseElements = screen.getAllByText(/Rose/i);
-    expect(roseElements.length).toBeGreaterThan(0);
-    expect(screen.getByText(/Plant Details/i)).toBeInTheDocument();
-  }, { timeout: 10000 }); // Increased timeout value
-}, 15000); // Overall test timeout
+    await waitFor(() => {
+      const roseElements = screen.getAllByText(/Rose/i);
+      expect(roseElements.length).toBeGreaterThan(0);
+    }, { timeout: 10000 });
+
+    expect(alertSpy).not.toHaveBeenCalled();
+
+}, 15000);
 });
