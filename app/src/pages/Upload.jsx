@@ -50,12 +50,12 @@ Return JSON with these fields:
 const Upload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [currentWeather, setCurrentWeather] = useState(null);
   const [forecast, setForecast] = useState([]);
   const [plantInfo, setPlantInfo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
-  const [errorMessage, setErrorMessage] = useState('');
 
   //fetch weather data using OpenWeatherAPI and geolocation
   const getWeatherData = () => {
@@ -140,23 +140,46 @@ const Upload = () => {
   //handle the uploaded image file
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    if (!file)
+    if (!file) {
+      console.log('No file selected');
       return;
-
+    }
+    console.log('Selected file:', {
+      name: file.name,
+      type: file.type,
+      size: file.size
+    });
+  
     const allowedTypes = [
       "image/png",
-      "image/jpeg",
-      "image/jpg",
-      "image/webp",
-      "image/gif",
+      "image/jpeg", 
+      "image/jpg", 
+      "image/webp", 
+      "image/gif"
     ];
+  
+    const fileType = file.type.toLowerCase();
 
-    if (!allowedTypes.includes(file.type)) {
-      setErrorMessage("Unsupported file type. Please upload a PNG, JPG, JPEG, or WEBP image");
+    if (!allowedTypes.includes(fileType)) {
+      setErrorMessage(`Unsupported file type: ${file.type}. 
+        Please upload one of these image types: 
+        PNG, JPEG, JPG, WEBP, or GIF`);
+      
+      // Clear file input
+      event.target.value = null;
       setSelectedFile(null);
       setPreviewUrl('');
       return;
     }
+
+    const maxSizeBytes = 5 * 1024 * 1024; // 5MB
+  if (file.size > maxSizeBytes) {
+    setErrorMessage(`File is too large. Maximum file size is 5MB.`);
+    event.target.value = null;
+    setSelectedFile(null);
+    setPreviewUrl('');
+    return;
+  }
 
     setErrorMessage('');
     const reader = new FileReader();
@@ -165,6 +188,25 @@ const Upload = () => {
       setSelectedFile(file);
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleDragOver = (event) => {
+    if (event.target.closest('.upload-area')) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
+
+  const handleDrop = (event) => {
+    if (event.target.closest('.upload-area')) {
+      event.preventDefault();
+      event.stopPropagation();
+      const file = event.dataTransfer.files[0];
+      if (file) {
+        const fileEvent = { target: { files: [file] } };
+        handleFileChange(fileEvent);
+      }
+    }
   };
 
   //handle identify button
@@ -307,19 +349,54 @@ Please provide care recommendations considering these weather conditions.
   };
 
   return (
-    <div className="upload-page">
+    <div>
       <Navbar />
-      
-      {!loading && !plantInfo && (
-        <div className="upload-container">
-          <h2>Upload Your Plant Image</h2>
-          <input type="file" onChange={handleFileChange} accept="image/*" />
-          {previewUrl && <img src={previewUrl} alt="Preview" className="preview-image" />}
-          <button onClick={handleIdentify} disabled={loading}>
-            {loading ? "Identifying" : "Identify Plant"}
-          </button>
-        </div>
-      )}
+      <div className="upload-page">
+        {!loading && !plantInfo && (
+          <div className="upload-container">
+            <h1>Digital Garden</h1>
+            <div 
+              className={`upload-area ${previewUrl ? 'with-preview' : ''}`}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+            >
+              {!previewUrl ? (
+                <>
+                  <div className="upload-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2C11.4477 2 11 2.4477 11 3V11H3C2.4477 11 2 11.4477 2 12C2 12.5523 2.4477 13 3 13H11V21C11 21.5523 11.4477 22 12 22C12.5523 22 13 21.5523 13 21V13H21C21.5523 13 22 12.5523 22 12C22 11.4477 21.5523 11 21 11H13V3C13 2.4477 12.5523 2 12 2Z" />
+                    </svg>
+                  </div>
+
+                  <p>Drag and drop photo or click to browse</p>
+                  <input 
+                    type="file" 
+                    className="file-input"
+                    onChange={handleFileChange} 
+                    accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/jpg,image/webp"
+                  />
+                </>
+              ) : (
+                <img 
+                  src={previewUrl} 
+                  alt="Preview" 
+                  className="preview-image" 
+                />
+              )}
+            </div>
+            {previewUrl && (
+              <div className="upload-actions">
+                <button 
+                  className="analyze-btn" 
+                  onClick={handleIdentify}
+                  disabled={!selectedFile}
+                >
+                  Analyze Plant
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       
       {loading && (
         <div className="upload-container">
@@ -551,6 +628,7 @@ Please provide care recommendations considering these weather conditions.
       )}
 
       <ErrorPopup message={errorMessage} onClose={() => setErrorMessage('')} />
+    </div>
     </div>
   );
 };
