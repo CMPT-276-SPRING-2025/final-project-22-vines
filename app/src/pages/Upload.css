@@ -27,6 +27,7 @@
   text-align: center;
   cursor: pointer;
   transition: background-color 0.3s;
+  position: relative;
 }
 
 .upload-area:hover {
@@ -58,13 +59,12 @@
   height: 100%;
   opacity: 0;
   cursor: pointer;
+  z-index: 1; /* Ensures the file input is above other elements */
 }
 
 .preview-image {
-  max-width: 100%;
-  max-height: 400px;
-  border-radius: 12px;
-  object-fit: cover;
+  max-width: 100%; /* Make sure the image fits within the upload-area */
+  height: auto;
 }
 
 .upload-actions {
