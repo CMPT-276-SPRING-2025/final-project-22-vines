@@ -14,6 +14,7 @@ function App() {
         v7_relativeSplatPath: true,
       }}
     >
+      <div className="flex flex-col min-h-screen">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/Upload" element={<Upload />} />
@@ -22,6 +23,7 @@ function App() {
         <Route path="/Contact" element={<Contact />} />
       </Routes>
       <Footer />
+      </div>
     </Router>
   );
 }
