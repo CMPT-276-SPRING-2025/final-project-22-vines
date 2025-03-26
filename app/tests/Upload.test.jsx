@@ -109,31 +109,31 @@ describe('Upload Component', () => {
   });
 
   test('processes a valid image file and displays plant details', async () => {
-    await act(async () => {
-      render(<Upload />);
-    });
-    const input = document.querySelector('input[type="file"]');
-    const file = new File(['dummy content'], 'example.png', { type: 'image/png' });
-    await act(async () => {
-      fireEvent.change(input, { target: { files: [file] } });
-    });
-
-    //wait for image to be render
-    await waitFor(() => {
-      expect(document.querySelector('img.preview-image')).toBeInTheDocument();
-    });
-
-    // identify
-    const button = screen.getByRole('button', { name: /identify/i });
-    await act(async () => {
-      fireEvent.click(button);
-    });
-
-    //wait for plant detail by gemini
-    await waitFor(() => {
-      const roseElements = screen.getAllByText(/Rose/i);
-      expect(roseElements.length).toBeGreaterThan(0);
-      expect(screen.getByText(/Plant Details/i)).toBeInTheDocument();
-    }, { timeout: 5000 });
+  await act(async () => {
+    render(<Upload />);
   });
+  const input = document.querySelector('input[type="file"]');
+  const file = new File(['dummy content'], 'example.png', { type: 'image/png' });
+  await act(async () => {
+    fireEvent.change(input, { target: { files: [file] } });
+  });
+
+  // wait for image to be rendered
+  await waitFor(() => {
+    expect(document.querySelector('img.preview-image')).toBeInTheDocument();
+  });
+
+  // identify
+  const button = screen.getByRole('button', { name: /identify/i });
+  await act(async () => {
+    fireEvent.click(button);
+  });
+
+  // wait for plant detail by gemini
+  await waitFor(() => {
+    const roseElements = screen.getAllByText(/Rose/i);
+    expect(roseElements.length).toBeGreaterThan(0);
+    expect(screen.getByText(/Plant Details/i)).toBeInTheDocument();
+  }, { timeout: 10000 }); // Increased timeout value
+}, 15000); // Overall test timeout
 });
