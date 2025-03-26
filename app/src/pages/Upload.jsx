@@ -368,7 +368,7 @@ Please provide care recommendations considering these weather conditions.
                     </svg>
                   </div>
 
-                  <p>Drag and drop photo or click to browse</p>
+                  <p>Drag and drop photo or click to Upload Your Plant Image.</p>
                   <input 
                     type="file" 
                     className="file-input"
