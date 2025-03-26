@@ -373,7 +373,7 @@ Please provide care recommendations considering these weather conditions.
                     type="file" 
                     className="file-input"
                     onChange={handleFileChange} 
-                    accept="image/*" 
+                    accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/jpg,image/webp"
                   />
                 </>
               ) : (
