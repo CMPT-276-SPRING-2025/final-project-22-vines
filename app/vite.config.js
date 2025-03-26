@@ -4,10 +4,15 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()], 
+  plugins: [react(), tailwindcss()],
   test: {
     globals: true,
-    environment: 'jsdom', // Added jsdom environment for testing
+    environment: 'jsdom',
     setupFiles: 'tests/setupTests.js',
   },
+  resolve: {
+    alias: {
+      '@emailjs/browser': '@emailjs/browser/es/index.js'
+    }
+  }
 });
