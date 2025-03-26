@@ -307,8 +307,9 @@ Please provide care recommendations considering these weather conditions.
   };
 
   return (
+    <div><Navbar />
     <div className="upload-page">
-      <Navbar />
+      
       
       {!loading && !plantInfo && (
         <div className="upload-container">
@@ -551,6 +552,7 @@ Please provide care recommendations considering these weather conditions.
       )}
 
       <ErrorPopup message={errorMessage} onClose={() => setErrorMessage('')} />
+    </div>
     </div>
   );
 };
