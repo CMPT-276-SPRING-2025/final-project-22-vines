@@ -120,6 +120,9 @@ const Upload = () => {
 
   // Get weather icon based on condition
   const getWeatherIcon = (condition) => {
+    if (!condition) {
+      return '☁️'; // Return a default icon if the condition is undefined
+    }
     switch (condition.toLowerCase()) {
       case 'clear':
         return '☀️';
