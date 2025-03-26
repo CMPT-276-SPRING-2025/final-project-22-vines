@@ -140,23 +140,46 @@ const Upload = () => {
   //handle the uploaded image file
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    if (!file)
+    if (!file) {
+      console.log('No file selected');
       return;
-
+    }
+    console.log('Selected file:', {
+      name: file.name,
+      type: file.type,
+      size: file.size
+    });
+  
     const allowedTypes = [
       "image/png",
-      "image/jpeg",
-      "image/jpg",
-      "image/webp",
-      "image/gif",
+      "image/jpeg", 
+      "image/jpg", 
+      "image/webp", 
+      "image/gif"
     ];
+  
+    const fileType = file.type.toLowerCase();
 
-    if (!allowedTypes.includes(file.type)) {
-      setErrorMessage("Unsupported file type. Please upload a PNG, JPG, JPEG, or WEBP image");
+    if (!allowedTypes.includes(fileType)) {
+      setErrorMessage(`Unsupported file type: ${file.type}. 
+        Please upload one of these image types: 
+        PNG, JPEG, JPG, WEBP, or GIF`);
+      
+      // Clear file input
+      event.target.value = null;
       setSelectedFile(null);
       setPreviewUrl('');
       return;
     }
+
+    const maxSizeBytes = 5 * 1024 * 1024; // 5MB
+  if (file.size > maxSizeBytes) {
+    setErrorMessage(`File is too large. Maximum file size is 5MB.`);
+    event.target.value = null;
+    setSelectedFile(null);
+    setPreviewUrl('');
+    return;
+  }
 
     setErrorMessage('');
     const reader = new FileReader();
