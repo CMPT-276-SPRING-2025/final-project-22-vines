@@ -415,217 +415,236 @@ Please provide care recommendations considering these weather conditions.
         </div>
       )}
 
-      {plantInfo && (
-        <>
-          <div className="plant-info">
-            <h2>{plantInfo.name || "Unknown Plant"}</h2>
-            <p className="scientific-name">{plantInfo.scientificName || ""}</p>
-            
-            {/*health overview*/}
-            {plantInfo.healthOverview && (
-              <div className="health-overview">
-                <h3>Health Overview</h3>
-                <div className="progress-bar">
-                  <label>Overall Health</label>
-                  <div className="progress">
-                    <div
-                      className="progress-fill progress-fill-overall"
-                      style={{ width: `${plantInfo.healthOverview.overallHealth || 0}%` }}
-                    >
-                      {plantInfo.healthOverview.overallHealth || 0}%
-                    </div>
-                  </div>
+{plantInfo && (
+  <>
+    <div className="results-container">
+      {/* Left Column */}
+      <div className="results-left-column">
+        {/* Plant Image */}
+        <div className="plant-image-container">
+          <img src={previewUrl} alt={plantInfo.name || "Plant"} />
+        </div>
+        
+        {/* Potential Health Conditions */}
+        <div className="section-card">
+          <h3>Potential Health Conditions</h3>
+          {Array.isArray(plantInfo.potentialHealthConditions) && plantInfo.potentialHealthConditions.length > 0 ? (
+            plantInfo.potentialHealthConditions.map((condition, index) => (
+              <div key={index} className="health-condition-item">
+                <div className="health-condition-title">
+                  {condition.title}
                 </div>
-                <div className="progress-bar">
-                  <label>Watering Needs</label>
-                  <div className="progress">
-                    <div
-                      className="progress-fill progress-fill-watering"
-                      style={{ width: `${plantInfo.healthOverview.wateringNeeds || 0}%` }}
-                    >
-                      {plantInfo.healthOverview.wateringNeeds || 0}%
-                    </div>
+                <h4>Possible Causes:</h4>
+                <ul>
+                  {condition.possibleCauses.map((cause, i) => <li key={i}>{cause}</li>)}
+                </ul>
+                <h4>Solutions:</h4>
+                <ul>
+                  {condition.solutions.map((sol, i) => <li key={i}>{sol}</li>)}
+                </ul>
+              </div>
+            ))
+          ) : (
+            <p>No health issues detected.</p>
+          )}
+        </div>
+      </div>
+      
+      {/* Right Column */}
+      <div className="results-right-column">
+        {/* Overview */}
+        <div className="section-card">
+          <h3>Overview</h3>
+          <h2>{plantInfo.name || "Unknown Plant"}</h2>
+          <p className="scientific-name">{plantInfo.scientificName || ""}</p>
+          <p>{plantInfo.description || ""}</p>
+          
+          {plantInfo.healthOverview && (
+            <div className="health-overview">
+              <div className="progress-bar">
+                <label>Overall Health</label>
+                <div className="progress">
+                  <div
+                    className="progress-fill progress-fill-overall"
+                    style={{ width: `${plantInfo.healthOverview.overallHealth || 0}%` }}
+                  >
+                    {plantInfo.healthOverview.overallHealth || 0}%
                   </div>
-                </div>
-                <div className="progress-bar">
-                  <label>Light Exposure</label>
-                  <div className="progress">
-                    <div
-                      className="progress-fill progress-fill-light"
-                      style={{ width: `${plantInfo.healthOverview.lightExposure || 0}%` }}
-                    >
-                      {plantInfo.healthOverview.lightExposure || 0}%
-                    </div>
-                  </div>
-                </div>
-                <div className="suitability">
-                  <p><strong>Temperature Suitability:</strong> {plantInfo.healthOverview.temperatureSuitability || "N/A"}</p>
-                  <p><strong>Humidity Suitability:</strong> {plantInfo.healthOverview.humiditySuitability || "N/A"}</p>
                 </div>
               </div>
-            )}
-
-            {/*potential health condition*/}
-            {Array.isArray(plantInfo.potentialHealthConditions) && plantInfo.potentialHealthConditions.length > 0 && (
-              <div className="potential-health-conditions">
-                <h3>Potential Health Conditions</h3>
-                {plantInfo.potentialHealthConditions.map((condition, index) => (
-                  <div key={index} className="health-condition-item">
-                    <div className="health-condition-title">
-                      {condition.title}
-                    </div>
-                    <h4>Possible Causes:</h4>
-                    <ul>
-                      {condition.possibleCauses.map((cause, i) => <li key={i}>{cause}</li>)}
-                    </ul>
-                    <h4>Solutions:</h4>
-                    <ul>
-                      {condition.solutions.map((sol, i) => <li key={i}>{sol}</li>)}
-                    </ul>
+              <div className="progress-bar">
+                <label>Watering Needs</label>
+                <div className="progress">
+                  <div
+                    className="progress-fill progress-fill-watering"
+                    style={{ width: `${plantInfo.healthOverview.wateringNeeds || 0}%` }}
+                  >
+                    {plantInfo.healthOverview.wateringNeeds || 0}%
                   </div>
-                ))}
+                </div>
               </div>
-            )}
-
-            {/*plant care*/}
-            {plantInfo.plantCare && (
-              <div className="plant-care">
-                <h3>Plant Care</h3>
-
-                {/*watering*/}
-                {Array.isArray(plantInfo.plantCare.watering) && plantInfo.plantCare.watering.length > 0 && (
-                  <div className="care-item">
-                    <h4 className="watering">Watering</h4>
-                    <ul>
-                      {plantInfo.plantCare.watering.map((tip, i) => <li key={i}>{tip}</li>)}
-                    </ul>
+              <div className="progress-bar">
+                <label>Light Exposure</label>
+                <div className="progress">
+                  <div
+                    className="progress-fill progress-fill-light"
+                    style={{ width: `${plantInfo.healthOverview.lightExposure || 0}%` }}
+                  >
+                    {plantInfo.healthOverview.lightExposure || 0}%
                   </div>
-                )}
-                {/*light*/}
-                {Array.isArray(plantInfo.plantCare.light) && plantInfo.plantCare.light.length > 0 && (
-                  <div className="care-item">
-                    <h4 className="light">Light</h4>
-                    <ul>
-                      {plantInfo.plantCare.light.map((tip, i) => <li key={i}>{tip}</li>)}
-                    </ul>
-                  </div>
-                )}
-                {/*humidity*/}
-                {Array.isArray(plantInfo.plantCare.humidity) && plantInfo.plantCare.humidity.length > 0 && (
-                  <div className="care-item">
-                    <h4 className="humidity">Humidity</h4>
-                    <ul>
-                      {plantInfo.plantCare.humidity.map((tip, i) => <li key={i}>{tip}</li>)}
-                    </ul>
-                  </div>
-                )}
-                {/*temperature*/}
-                {Array.isArray(plantInfo.plantCare.temperature) && plantInfo.plantCare.temperature.length > 0 && (
-                  <div className="care-item">
-                    <h4 className="temperature">Temperature</h4>
-                    <ul>
-                      {plantInfo.plantCare.temperature.map((tip, i) => <li key={i}>{tip}</li>)}
-                    </ul>
-                  </div>
-                )}
-                {/*fertilization */}
-                {Array.isArray(plantInfo.plantCare.fertilization) && plantInfo.plantCare.fertilization.length > 0 && (
-                  <div className="care-item">
-                    <h4 className="fertilization">Fertilization</h4>
-                    <ul>
-                      {plantInfo.plantCare.fertilization.map((tip, i) => <li key={i}>{tip}</li>)}
-                    </ul>
-                  </div>
-                )}
-                {/*soil*/}
-                {Array.isArray(plantInfo.plantCare.soil) && plantInfo.plantCare.soil.length > 0 && (
-                  <div className="care-item">
-                    <h4 className="soil">Soil & Potting</h4>
-                    <ul>
-                      {plantInfo.plantCare.soil.map((tip, i) => <li key={i}>{tip}</li>)}
-                    </ul>
-                  </div>
-                )}
+                </div>
               </div>
-            )}
+              <div className="suitability">
+                <p><strong>Temperature Suitability:</strong> {plantInfo.healthOverview.temperatureSuitability || "N/A"}</p>
+                <p><strong>Humidity Suitability:</strong> {plantInfo.healthOverview.humiditySuitability || "N/A"}</p>
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {/* Plant Care */}
+        <div className="section-card">
+          <h3>Plant Care</h3>
+          {plantInfo.plantCare ? (
+            <>
+              {/* Watering */}
+              {Array.isArray(plantInfo.plantCare.watering) && plantInfo.plantCare.watering.length > 0 && (
+                <div className="care-item">
+                  <h4 className="watering">Watering</h4>
+                  <ul>
+                    {plantInfo.plantCare.watering.map((tip, i) => <li key={i}>{tip}</li>)}
+                  </ul>
+                </div>
+              )}
+              {/* Light */}
+              {Array.isArray(plantInfo.plantCare.light) && plantInfo.plantCare.light.length > 0 && (
+                <div className="care-item">
+                  <h4 className="light">Light</h4>
+                  <ul>
+                    {plantInfo.plantCare.light.map((tip, i) => <li key={i}>{tip}</li>)}
+                  </ul>
+                </div>
+              )}
+              {/* Humidity */}
+              {Array.isArray(plantInfo.plantCare.humidity) && plantInfo.plantCare.humidity.length > 0 && (
+                <div className="care-item">
+                  <h4 className="humidity">Humidity</h4>
+                  <ul>
+                    {plantInfo.plantCare.humidity.map((tip, i) => <li key={i}>{tip}</li>)}
+                  </ul>
+                </div>
+              )}
+              {/* Temperature */}
+              {Array.isArray(plantInfo.plantCare.temperature) && plantInfo.plantCare.temperature.length > 0 && (
+                <div className="care-item">
+                  <h4 className="temperature">Temperature</h4>
+                  <ul>
+                    {plantInfo.plantCare.temperature.map((tip, i) => <li key={i}>{tip}</li>)}
+                  </ul>
+                </div>
+              )}
+              {/* Fertilization */}
+              {Array.isArray(plantInfo.plantCare.fertilization) && plantInfo.plantCare.fertilization.length > 0 && (
+                <div className="care-item">
+                  <h4 className="fertilization">Fertilization</h4>
+                  <ul>
+                    {plantInfo.plantCare.fertilization.map((tip, i) => <li key={i}>{tip}</li>)}
+                  </ul>
+                </div>
+              )}
+              {/* Soil */}
+              {Array.isArray(plantInfo.plantCare.soil) && plantInfo.plantCare.soil.length > 0 && (
+                <div className="care-item">
+                  <h4 className="soil">Soil & Potting</h4>
+                  <ul>
+                    {plantInfo.plantCare.soil.map((tip, i) => <li key={i}>{tip}</li>)}
+                  </ul>
+                </div>
+              )}
+            </>
+          ) : (
+            <p>No care information available.</p>
+          )}
+        </div>
+      </div>
+    </div>
+
+    {/* Weather Sections (kept as is) */}
+    {currentWeather && (
+      <div className="weather-container">
+        <h2>Today's Weather</h2>
+        <div className="todays-weather">
+          <div className="weather-date">
+            {currentWeather.date}
           </div>
+          <div className="weather-icon">
+            {getWeatherIcon(currentWeather.condition)}
+          </div>
+          <div className="weather-condition">
+            {currentWeather.condition === 'Clouds' ? 'Mostly Cloudy' : currentWeather.condition}
+          </div>
+        </div>
+        
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', marginBottom: '20px' }}>
+          <div className="weather-temp">
+            <h3>Temperature</h3>
+            <div className="temp-value">{currentWeather.temp}°C</div>
+            <div className="temp-label">{plantInfo.healthOverview?.temperatureSuitability || 'Normal'}</div>
+          </div>
+          
+          <div className="weather-humidity">
+            <h3>Humidity</h3>
+            <div className="humidity-value">{currentWeather.humidity}%</div>
+            <div className="humidity-label">{plantInfo.healthOverview?.humiditySuitability || 'Normal'}</div>
+          </div>
+        </div>
+        
+        <div className="weather-details">
+          <p>
+            Ideal range: 18-24°C. {plantInfo.healthOverview?.temperatureSuitability || 'Current temperature is suitable'} 
+            for {plantInfo.name}.
+          </p>
+          <p>
+            Ideal range: 40-70% humidity. {plantInfo.healthOverview?.humiditySuitability || 'Current humidity level is suitable'} 
+            for optimal growth.
+          </p>
+        </div>
+      </div>
+    )}
 
-          {/* Today's Weather */}
-          {currentWeather && (
-            <div className="weather-container">
-              <h2>Today's Weather</h2>
-              <div className="todays-weather">
-                <div className="weather-date">
-                  {currentWeather.date}
-                </div>
-                <div className="weather-icon">
-                  {getWeatherIcon(currentWeather.condition)}
-                </div>
-                <div className="weather-condition">
-                  {currentWeather.condition === 'Clouds' ? 'Mostly Cloudy' : currentWeather.condition}
-                </div>
-              </div>
-              
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', marginBottom: '20px' }}>
-                <div className="weather-temp">
-                  <h3>Temperature</h3>
-                  <div className="temp-value">{currentWeather.temp}°C</div>
-                  <div className="temp-label">{plantInfo.healthOverview?.temperatureSuitability || 'Normal'}</div>
-                </div>
-                
-                <div className="weather-humidity">
-                  <h3>Humidity</h3>
-                  <div className="humidity-value">{currentWeather.humidity}%</div>
-                  <div className="humidity-label">{plantInfo.healthOverview?.humiditySuitability || 'Normal'}</div>
-                </div>
-              </div>
-              
-              <div className="weather-details">
-                <p>
-                  Ideal range: 18-24°C. {plantInfo.healthOverview?.temperatureSuitability || 'Current temperature is suitable'} 
-                  for {plantInfo.name}.
-                </p>
-                <p>
-                  Ideal range: 40-70% humidity. {plantInfo.healthOverview?.humiditySuitability || 'Current humidity level is suitable'} 
-                  for optimal growth.
-                </p>
+    {/* Weather Forecast (kept as is) */}
+    {forecast.length > 0 && (
+      <div className="weather-container">
+        <h3>Weather Forecast</h3>
+        <div className="forecast-days">
+          {forecast.map((day, index) => (
+            <div key={index} className="forecast-day">
+              <div className="forecast-day-name">{day.day}</div>
+              <div className="forecast-icon">{day.icon}</div>
+              <div className="forecast-temp">{day.temp}°C</div>
+              <div className="forecast-humidity">{day.humidity}%</div>
+              <div className="forecast-notes">
+                {index === 0 && 'Normal conditions. Keep watering schedule.'}
+                {index === 1 && 'Ideal humidity. No extra care needed.'}
+                {index === 2 && 'Reduce watering due to high humidity.'}
+                {index === 3 && 'Slightly dry air, consider misting.'}
+                {index === 4 && 'Move plant indoors and away from windows.'}
               </div>
             </div>
-          )}
+          ))}
+        </div>
+      </div>
+    )}
 
-          {/* Weather Forecast */}
-          {forecast.length > 0 && (
-            <div className="weather-container">
-              <h3>Weather Forecast</h3>
-              <div className="forecast-days">
-                {forecast.map((day, index) => (
-                  <div key={index} className="forecast-day">
-                    <div className="forecast-day-name">{day.day}</div>
-                    <div className="forecast-icon">{day.icon}</div>
-                    <div className="forecast-temp">{day.temp}°C</div>
-                    <div className="forecast-humidity">{day.humidity}%</div>
-                    <div className="forecast-notes">
-                      {index === 0 && 'Normal conditions. Keep watering schedule.'}
-                      {index === 1 && 'Ideal humidity. No extra care needed.'}
-                      {index === 2 && 'Reduce watering due to high humidity.'}
-                      {index === 3 && 'Slightly dry air, consider misting.'}
-                      {index === 4 && 'Move plant indoors and away from windows.'}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <a href="#" className="analyze-another-btn" onClick={() => {
-            setPlantInfo(null);
-            setSelectedFile(null);
-            setPreviewUrl('');
-          }}>
-            Analyze Another Plant
-          </a>
-        </>
-      )}
+    <a href="#" className="analyze-another-btn" onClick={() => {
+      setPlantInfo(null);
+      setSelectedFile(null);
+      setPreviewUrl('');
+    }}>
+      Analyze Another Plant
+    </a>
+  </>
+)}
 
       <ErrorPopup message={errorMessage} onClose={() => setErrorMessage('')} />
     </div>
