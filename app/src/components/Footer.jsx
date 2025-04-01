@@ -43,7 +43,7 @@ const Footer = () => {
 
               {/* Think about something to add here later */}
               <div>
-                <h3 className="text-lg font-semibold mb-2">Something</h3>
+                <h3 className="text-lg font-semibold mb-2">Subscribe to stay updated!</h3>
                 <form className="flex flex-col space-y-2">
                   <input
                     type="email"
