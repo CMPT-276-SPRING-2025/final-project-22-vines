@@ -93,16 +93,17 @@ const Upload = () => {
         });
 
         const forecastDays = [];
-        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
         
-        // Get one forecast per day for the next 5 days
+        // Get one forecast per day for the next 4 days
         for (let i = 0; i < 4; i++) {
-          const index = i * 8 + 8; // Each day has 8 entries (3-hour intervals)
+          const index = i * 8 + 8; 
           if (data.list[index]) {
             const dayData = data.list[index];
             const date = new Date(dayData.dt * 1000);
+            const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+            
             forecastDays.push({
-              day: days[i],
+              day: dayName,
               temp: Math.round(dayData.main.temp),
               humidity: dayData.main.humidity,
               condition: dayData.weather[0].main,
