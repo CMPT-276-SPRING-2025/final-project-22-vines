@@ -294,24 +294,42 @@
   padding-bottom: 10px;
 }
 
-.weather-inline-content {
+.weather-inline-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.weather-inline-center {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  align-items: center;
+  text-align: center;
+  padding: 0 10px;
+}
+
+.weather-inline-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .weather-inline-main {
+  flex: 1;
   display: flex;
-  align-items: center;
-  gap: 15px;
+  justify-content: center;
 }
 
 .weather-inline-icon {
   font-size: 40px;
+  margin-bottom: 5px;
 }
 
 .weather-inline-info {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .weather-inline-date {
@@ -337,6 +355,7 @@
   border-radius: 8px;
   background-color: #f9f9f9;
   min-width: 100px;
+  max-width: 120px;
 }
 
 .metric-label {

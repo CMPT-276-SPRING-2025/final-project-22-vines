@@ -351,8 +351,14 @@ Please provide care recommendations considering these weather conditions.
     return (
       <div className="weather-inline">
         <h4>Today's Weather</h4>
-        <div className="weather-inline-content">
-          <div className="weather-inline-main">
+        <div className="weather-inline-row">
+          <div className="weather-inline-metric">
+            <span className="metric-label">Temp:</span>
+            <span className="metric-value">{currentWeather.temp}°C</span>
+            <span className="metric-status">{plantInfo?.healthOverview?.temperatureSuitability || 'Suitable'}</span>
+          </div>
+          
+          <div className="weather-inline-center">
             <div className="weather-inline-icon">
               {getWeatherIcon(currentWeather.condition)}
             </div>
@@ -363,17 +369,11 @@ Please provide care recommendations considering these weather conditions.
               </div>
             </div>
           </div>
-          <div className="weather-inline-metrics">
-            <div className="weather-inline-metric">
-              <span className="metric-label">Temp:</span>
-              <span className="metric-value">{currentWeather.temp}°C</span>
-              <span className="metric-status">{plantInfo?.healthOverview?.temperatureSuitability || 'Normal'}</span>
-            </div>
-            <div className="weather-inline-metric">
-              <span className="metric-label">Humidity:</span>
-              <span className="metric-value">{currentWeather.humidity}%</span>
-              <span className="metric-status">{plantInfo?.healthOverview?.humiditySuitability || 'Normal'}</span>
-            </div>
+          
+          <div className="weather-inline-metric">
+            <span className="metric-label">Humidity:</span>
+            <span className="metric-value">{currentWeather.humidity}%</span>
+            <span className="metric-status">{plantInfo?.healthOverview?.humiditySuitability || 'Slightly Too High'}</span>
           </div>
         </div>
       </div>
