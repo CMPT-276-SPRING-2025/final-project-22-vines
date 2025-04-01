@@ -7,7 +7,7 @@ const FAQ = () => {
     const [openIndex, setOpenIndex] = useState(null);
 
     const faqs = [
-        { question: "Question 1?", answer: "Answer to question 1..." },
+        { question: "What if the weather doesn't display?", answer: "If the webpage does not display the weather, please ensure that location access is granted and try uploading the photo again." },
         { question: "Question 2?", answer: "Answer to question 2..." },
         { question: "Question 3?", answer: "Answer to question 3..." }
 

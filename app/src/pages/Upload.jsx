@@ -6,7 +6,7 @@ const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 const GEMINI_API_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
 
-
+// Base plant prompt remains unchanged
 const BASE_PLANT_PROMPT = `
 Identify the plant species, analyze its health, and provide care recommendations.
 If the image is not of a plant, return JSON with an "error" field.
@@ -46,8 +46,8 @@ Return JSON with these fields:
 }
 `;
 
-
 const Upload = () => {
+  // All state variables remain unchanged
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -57,7 +57,7 @@ const Upload = () => {
   const [loading, setLoading] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
 
-  //fetch weather data using OpenWeatherAPI and geolocation
+  // All functions remain unchanged
   const getWeatherData = () => {
     return new Promise((resolve, reject) => {
       if (navigator.geolocation) {
@@ -80,7 +80,6 @@ const Upload = () => {
     });
   };
 
-  //handle the weather data response
   useEffect(() => {
     getWeatherData()
       .then((data) => {
@@ -94,16 +93,17 @@ const Upload = () => {
         });
 
         const forecastDays = [];
-        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
         
-        // Get one forecast per day for the next 5 days
-        for (let i = 0; i < 5; i++) {
-          const index = i * 8 + 8; // Each day has 8 entries (3-hour intervals)
+        // Get one forecast per day for the next 4 days
+        for (let i = 0; i < 4; i++) {
+          const index = i * 8 + 8; 
           if (data.list[index]) {
             const dayData = data.list[index];
             const date = new Date(dayData.dt * 1000);
+            const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+            
             forecastDays.push({
-              day: days[i],
+              day: dayName,
               temp: Math.round(dayData.main.temp),
               humidity: dayData.main.humidity,
               condition: dayData.weather[0].main,
@@ -118,7 +118,6 @@ const Upload = () => {
       });
   }, []);
 
-  // Get weather icon based on condition
   const getWeatherIcon = (condition) => {
     if (!condition) {
       return '☁️'; // Return a default icon if the condition is undefined
@@ -137,7 +136,6 @@ const Upload = () => {
     }
   };
 
-  //handle the uploaded image file
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (!file) {
@@ -173,13 +171,13 @@ const Upload = () => {
     }
 
     const maxSizeBytes = 5 * 1024 * 1024; // 5MB
-  if (file.size > maxSizeBytes) {
-    setErrorMessage(`File is too large. Maximum file size is 5MB.`);
-    event.target.value = null;
-    setSelectedFile(null);
-    setPreviewUrl('');
-    return;
-  }
+    if (file.size > maxSizeBytes) {
+      setErrorMessage(`File is too large. Maximum file size is 5MB.`);
+      event.target.value = null;
+      setSelectedFile(null);
+      setPreviewUrl('');
+      return;
+    }
 
     setErrorMessage('');
     const reader = new FileReader();
@@ -209,7 +207,6 @@ const Upload = () => {
     }
   };
 
-  //handle identify button
   const handleIdentify = () => {
     if (!selectedFile) {
       alert("Please select an image");
@@ -228,7 +225,6 @@ const Upload = () => {
       setAnalysisProgress(progress);
     }, 300);
 
-    //get weather data
     getWeatherData()
       .then((data) => {
         const current = data.list[0];
@@ -348,6 +344,63 @@ Please provide care recommendations considering these weather conditions.
     );
   };
 
+  // This is the inline weather component for today's weather
+  const TodaysWeatherInline = () => {
+    if (!currentWeather) return null;
+    
+    return (
+      <div className="weather-inline">
+        <h4>Today's Weather</h4>
+        <div className="weather-inline-row">
+          <div className="weather-inline-metric">
+            <span className="metric-label">Temp:</span>
+            <span className="metric-value">{currentWeather.temp}°C</span>
+            <span className="metric-status">{plantInfo?.healthOverview?.temperatureSuitability || 'Suitable'}</span>
+          </div>
+          
+          <div className="weather-inline-center">
+            <div className="weather-inline-icon">
+              {getWeatherIcon(currentWeather.condition)}
+            </div>
+            <div className="weather-inline-info">
+              <div className="weather-inline-date">{currentWeather.date}</div>
+              <div className="weather-inline-condition">
+                {currentWeather.condition === 'Clouds' ? 'Mostly Cloudy' : currentWeather.condition}
+              </div>
+            </div>
+          </div>
+          
+          <div className="weather-inline-metric">
+            <span className="metric-label">Humidity:</span>
+            <span className="metric-value">{currentWeather.humidity}%</span>
+            <span className="metric-status">{plantInfo?.healthOverview?.humiditySuitability || 'Slightly Too High'}</span>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // This is the inline forecast component
+  const ForecastInline = () => {
+    if (forecast.length === 0) return null;
+    
+    return (
+      <div className="forecast-inline">
+        <h4>4-Day Forecast</h4>
+        <div className="forecast-inline-days">
+          {forecast.map((day, index) => (
+            <div key={index} className="forecast-inline-day">
+              <div className="forecast-inline-day-name">{day.day}</div>
+              <div className="forecast-inline-icon">{day.icon}</div>
+              <div className="forecast-inline-temp">{day.temp}°C</div>
+              <div className="forecast-inline-humidity">{day.humidity}%</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div>
       <Navbar />
@@ -417,205 +470,163 @@ Please provide care recommendations considering these weather conditions.
 
       {plantInfo && (
         <>
-          <div className="plant-info">
-            <h2>{plantInfo.name || "Unknown Plant"}</h2>
-            <p className="scientific-name">{plantInfo.scientificName || ""}</p>
-            
-            {/*health overview*/}
-            {plantInfo.healthOverview && (
-              <div className="health-overview">
-                <h3>Health Overview</h3>
-                <div className="progress-bar">
-                  <label>Overall Health</label>
-                  <div className="progress">
-                    <div
-                      className="progress-fill progress-fill-overall"
-                      style={{ width: `${plantInfo.healthOverview.overallHealth || 0}%` }}
-                    >
-                      {plantInfo.healthOverview.overallHealth || 0}%
-                    </div>
-                  </div>
-                </div>
-                <div className="progress-bar">
-                  <label>Watering Needs</label>
-                  <div className="progress">
-                    <div
-                      className="progress-fill progress-fill-watering"
-                      style={{ width: `${plantInfo.healthOverview.wateringNeeds || 0}%` }}
-                    >
-                      {plantInfo.healthOverview.wateringNeeds || 0}%
-                    </div>
-                  </div>
-                </div>
-                <div className="progress-bar">
-                  <label>Light Exposure</label>
-                  <div className="progress">
-                    <div
-                      className="progress-fill progress-fill-light"
-                      style={{ width: `${plantInfo.healthOverview.lightExposure || 0}%` }}
-                    >
-                      {plantInfo.healthOverview.lightExposure || 0}%
-                    </div>
-                  </div>
-                </div>
-                <div className="suitability">
-                  <p><strong>Temperature Suitability:</strong> {plantInfo.healthOverview.temperatureSuitability || "N/A"}</p>
-                  <p><strong>Humidity Suitability:</strong> {plantInfo.healthOverview.humiditySuitability || "N/A"}</p>
-                </div>
+          <div className="results-container">
+            {/* Left Column */}
+            <div className="results-left-column">
+              {/* Plant Image */}
+              <div className="plant-image-container">
+                <img src={previewUrl} alt={plantInfo.name || "Plant"} />
               </div>
-            )}
-
-            {/*potential health condition*/}
-            {Array.isArray(plantInfo.potentialHealthConditions) && plantInfo.potentialHealthConditions.length > 0 && (
-              <div className="potential-health-conditions">
+              
+              {/* New: Weather section integrated into left column */}
+              <div className="section-card weather-section">
+                <TodaysWeatherInline />
+                <ForecastInline />
+              </div>
+              
+              {/* Potential Health Conditions */}
+              <div className="section-card">
                 <h3>Potential Health Conditions</h3>
-                {plantInfo.potentialHealthConditions.map((condition, index) => (
-                  <div key={index} className="health-condition-item">
-                    <div className="health-condition-title">
-                      {condition.title}
+                {Array.isArray(plantInfo.potentialHealthConditions) && plantInfo.potentialHealthConditions.length > 0 ? (
+                  plantInfo.potentialHealthConditions.map((condition, index) => (
+                    <div key={index} className="health-condition-item">
+                      <div className="health-condition-title">
+                        {condition.title}
+                      </div>
+                      <h4>Possible Causes:</h4>
+                      <ul>
+                        {condition.possibleCauses.map((cause, i) => <li key={i}>{cause}</li>)}
+                      </ul>
+                      <h4>Solutions:</h4>
+                      <ul>
+                        {condition.solutions.map((sol, i) => <li key={i}>{sol}</li>)}
+                      </ul>
                     </div>
-                    <h4>Possible Causes:</h4>
-                    <ul>
-                      {condition.possibleCauses.map((cause, i) => <li key={i}>{cause}</li>)}
-                    </ul>
-                    <h4>Solutions:</h4>
-                    <ul>
-                      {condition.solutions.map((sol, i) => <li key={i}>{sol}</li>)}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/*plant care*/}
-            {plantInfo.plantCare && (
-              <div className="plant-care">
-                <h3>Plant Care</h3>
-
-                {/*watering*/}
-                {Array.isArray(plantInfo.plantCare.watering) && plantInfo.plantCare.watering.length > 0 && (
-                  <div className="care-item">
-                    <h4 className="watering">Watering</h4>
-                    <ul>
-                      {plantInfo.plantCare.watering.map((tip, i) => <li key={i}>{tip}</li>)}
-                    </ul>
-                  </div>
-                )}
-                {/*light*/}
-                {Array.isArray(plantInfo.plantCare.light) && plantInfo.plantCare.light.length > 0 && (
-                  <div className="care-item">
-                    <h4 className="light">Light</h4>
-                    <ul>
-                      {plantInfo.plantCare.light.map((tip, i) => <li key={i}>{tip}</li>)}
-                    </ul>
-                  </div>
-                )}
-                {/*humidity*/}
-                {Array.isArray(plantInfo.plantCare.humidity) && plantInfo.plantCare.humidity.length > 0 && (
-                  <div className="care-item">
-                    <h4 className="humidity">Humidity</h4>
-                    <ul>
-                      {plantInfo.plantCare.humidity.map((tip, i) => <li key={i}>{tip}</li>)}
-                    </ul>
-                  </div>
-                )}
-                {/*temperature*/}
-                {Array.isArray(plantInfo.plantCare.temperature) && plantInfo.plantCare.temperature.length > 0 && (
-                  <div className="care-item">
-                    <h4 className="temperature">Temperature</h4>
-                    <ul>
-                      {plantInfo.plantCare.temperature.map((tip, i) => <li key={i}>{tip}</li>)}
-                    </ul>
-                  </div>
-                )}
-                {/*fertilization */}
-                {Array.isArray(plantInfo.plantCare.fertilization) && plantInfo.plantCare.fertilization.length > 0 && (
-                  <div className="care-item">
-                    <h4 className="fertilization">Fertilization</h4>
-                    <ul>
-                      {plantInfo.plantCare.fertilization.map((tip, i) => <li key={i}>{tip}</li>)}
-                    </ul>
-                  </div>
-                )}
-                {/*soil*/}
-                {Array.isArray(plantInfo.plantCare.soil) && plantInfo.plantCare.soil.length > 0 && (
-                  <div className="care-item">
-                    <h4 className="soil">Soil & Potting</h4>
-                    <ul>
-                      {plantInfo.plantCare.soil.map((tip, i) => <li key={i}>{tip}</li>)}
-                    </ul>
-                  </div>
+                  ))
+                ) : (
+                  <p>No health issues detected.</p>
                 )}
               </div>
-            )}
-          </div>
-
-          {/* Today's Weather */}
-          {currentWeather && (
-            <div className="weather-container">
-              <h2>Today's Weather</h2>
-              <div className="todays-weather">
-                <div className="weather-date">
-                  {currentWeather.date}
-                </div>
-                <div className="weather-icon">
-                  {getWeatherIcon(currentWeather.condition)}
-                </div>
-                <div className="weather-condition">
-                  {currentWeather.condition === 'Clouds' ? 'Mostly Cloudy' : currentWeather.condition}
-                </div>
-              </div>
-              
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', marginBottom: '20px' }}>
-                <div className="weather-temp">
-                  <h3>Temperature</h3>
-                  <div className="temp-value">{currentWeather.temp}°C</div>
-                  <div className="temp-label">{plantInfo.healthOverview?.temperatureSuitability || 'Normal'}</div>
-                </div>
+            </div>
+            
+            {/* Right Column */}
+            <div className="results-right-column">
+              {/* Overview */}
+              <div className="section-card">
+                <h3>Overview</h3>
+                <h2>{plantInfo.name || "Unknown Plant"}</h2>
+                <p className="scientific-name">{plantInfo.scientificName || ""}</p>
+                <p>{plantInfo.description || ""}</p>
                 
-                <div className="weather-humidity">
-                  <h3>Humidity</h3>
-                  <div className="humidity-value">{currentWeather.humidity}%</div>
-                  <div className="humidity-label">{plantInfo.healthOverview?.humiditySuitability || 'Normal'}</div>
-                </div>
-              </div>
-              
-              <div className="weather-details">
-                <p>
-                  Ideal range: 18-24°C. {plantInfo.healthOverview?.temperatureSuitability || 'Current temperature is suitable'} 
-                  for {plantInfo.name}.
-                </p>
-                <p>
-                  Ideal range: 40-70% humidity. {plantInfo.healthOverview?.humiditySuitability || 'Current humidity level is suitable'} 
-                  for optimal growth.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Weather Forecast */}
-          {forecast.length > 0 && (
-            <div className="weather-container">
-              <h3>Weather Forecast</h3>
-              <div className="forecast-days">
-                {forecast.map((day, index) => (
-                  <div key={index} className="forecast-day">
-                    <div className="forecast-day-name">{day.day}</div>
-                    <div className="forecast-icon">{day.icon}</div>
-                    <div className="forecast-temp">{day.temp}°C</div>
-                    <div className="forecast-humidity">{day.humidity}%</div>
-                    <div className="forecast-notes">
-                      {index === 0 && 'Normal conditions. Keep watering schedule.'}
-                      {index === 1 && 'Ideal humidity. No extra care needed.'}
-                      {index === 2 && 'Reduce watering due to high humidity.'}
-                      {index === 3 && 'Slightly dry air, consider misting.'}
-                      {index === 4 && 'Move plant indoors and away from windows.'}
+                {plantInfo.healthOverview && (
+                  <div className="health-overview">
+                    <div className="progress-bar">
+                      <label>Overall Health</label>
+                      <div className="progress">
+                        <div
+                          className="progress-fill progress-fill-overall"
+                          style={{ width: `${plantInfo.healthOverview.overallHealth || 0}%` }}
+                        >
+                          {plantInfo.healthOverview.overallHealth || 0}%
+                        </div>
+                      </div>
+                    </div>
+                    <div className="progress-bar">
+                      <label>Watering Needs</label>
+                      <div className="progress">
+                        <div
+                          className="progress-fill progress-fill-watering"
+                          style={{ width: `${plantInfo.healthOverview.wateringNeeds || 0}%` }}
+                        >
+                          {plantInfo.healthOverview.wateringNeeds || 0}%
+                        </div>
+                      </div>
+                    </div>
+                    <div className="progress-bar">
+                      <label>Light Exposure</label>
+                      <div className="progress">
+                        <div
+                          className="progress-fill progress-fill-light"
+                          style={{ width: `${plantInfo.healthOverview.lightExposure || 0}%` }}
+                        >
+                          {plantInfo.healthOverview.lightExposure || 0}%
+                        </div>
+                      </div>
+                    </div>
+                    <div className="suitability">
+                      <p><strong>Temperature Suitability:</strong> {plantInfo.healthOverview.temperatureSuitability || "N/A"}</p>
+                      <p><strong>Humidity Suitability:</strong> {plantInfo.healthOverview.humiditySuitability || "N/A"}</p>
                     </div>
                   </div>
-                ))}
+                )}
+              </div>
+              
+              {/* Plant Care */}
+              <div className="section-card">
+                <h3>Plant Care</h3>
+                {plantInfo.plantCare ? (
+                  <>
+                    {/* Watering */}
+                    {Array.isArray(plantInfo.plantCare.watering) && plantInfo.plantCare.watering.length > 0 && (
+                      <div className="care-item">
+                        <h4 className="watering">Watering</h4>
+                        <ul>
+                          {plantInfo.plantCare.watering.map((tip, i) => <li key={i}>{tip}</li>)}
+                        </ul>
+                      </div>
+                    )}
+                    {/* Light */}
+                    {Array.isArray(plantInfo.plantCare.light) && plantInfo.plantCare.light.length > 0 && (
+                      <div className="care-item">
+                        <h4 className="light">Light</h4>
+                        <ul>
+                          {plantInfo.plantCare.light.map((tip, i) => <li key={i}>{tip}</li>)}
+                        </ul>
+                      </div>
+                    )}
+                    {/* Humidity */}
+                    {Array.isArray(plantInfo.plantCare.humidity) && plantInfo.plantCare.humidity.length > 0 && (
+                      <div className="care-item">
+                        <h4 className="humidity">Humidity</h4>
+                        <ul>
+                          {plantInfo.plantCare.humidity.map((tip, i) => <li key={i}>{tip}</li>)}
+                        </ul>
+                      </div>
+                    )}
+                    {/* Temperature */}
+                    {Array.isArray(plantInfo.plantCare.temperature) && plantInfo.plantCare.temperature.length > 0 && (
+                      <div className="care-item">
+                        <h4 className="temperature">Temperature</h4>
+                        <ul>
+                          {plantInfo.plantCare.temperature.map((tip, i) => <li key={i}>{tip}</li>)}
+                        </ul>
+                      </div>
+                    )}
+                    {/* Fertilization */}
+                    {Array.isArray(plantInfo.plantCare.fertilization) && plantInfo.plantCare.fertilization.length > 0 && (
+                      <div className="care-item">
+                        <h4 className="fertilization">Fertilization</h4>
+                        <ul>
+                          {plantInfo.plantCare.fertilization.map((tip, i) => <li key={i}>{tip}</li>)}
+                        </ul>
+                      </div>
+                    )}
+                    {/* Soil */}
+                    {Array.isArray(plantInfo.plantCare.soil) && plantInfo.plantCare.soil.length > 0 && (
+                      <div className="care-item">
+                        <h4 className="soil">Soil & Potting</h4>
+                        <ul>
+                          {plantInfo.plantCare.soil.map((tip, i) => <li key={i}>{tip}</li>)}
+                        </ul>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <p>No care information available.</p>
+                )}
               </div>
             </div>
-          )}
+          </div>
 
           <a href="#" className="analyze-another-btn" onClick={() => {
             setPlantInfo(null);
