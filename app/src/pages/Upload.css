@@ -17,12 +17,7 @@
 
 .upload-container h1 {
   font-size: 32px;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.upload-container h2 {
-  font-size: 28px;
+  font-weight: bold;
   margin-bottom: 20px;
   color: #333;
 }
@@ -285,7 +280,7 @@
 }
 
 .weather-inline h4 {
-  color: #2E7D32;
+  color: #333;
   font-size: 22px;
   font-weight: bold;
   margin-top: 0;
@@ -380,7 +375,7 @@
 }
 
 .forecast-inline h4 {
-  color: #2E7D32;
+  color: #333;
   font-size: 22px;
   font-weight: bold;
   margin-top: 0;

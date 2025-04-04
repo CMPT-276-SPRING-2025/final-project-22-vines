@@ -415,7 +415,7 @@ Please provide care recommendations considering these weather conditions.
       <div className="upload-page">
         {!loading && !plantInfo && (
           <div className="upload-container">
-            <h1>Digital Garden</h1>
+            <h1>Analyze Your Plant</h1>
             <div 
               className={`upload-area ${previewUrl ? 'with-preview' : ''}`}
               onDragOver={handleDragOver}
@@ -461,7 +461,7 @@ Please provide care recommendations considering these weather conditions.
       
       {loading && (
         <div className="upload-container">
-          <h2>Upload Photo Of Plant</h2>
+          <h1>Analyze Your Plant</h1>
           {previewUrl && <img src={previewUrl} alt="Preview" className="preview-image" />}
           <div className="analyzing-container">
             <div className="analyzing-text">Analyzing...</div>
