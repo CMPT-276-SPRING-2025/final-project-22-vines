@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import "./Upload.css";
 
+console.log("Environment Variables:", import.meta.env); // Debugging environment variables
+
 const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 const GEMINI_API_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
@@ -134,6 +136,12 @@ const Upload = () => {
       default:
         return '☁️';
     }
+  };
+
+  const resetAnalysis = () => {
+    setPlantInfo(null);
+    setSelectedFile(null);
+    setPreviewUrl('');
   };
 
   const handleFileChange = (event) => {
@@ -403,7 +411,7 @@ Please provide care recommendations considering these weather conditions.
 
   return (
     <div>
-      <Navbar />
+      <Navbar onReset={resetAnalysis} />
       <div className="upload-page">
         {!loading && !plantInfo && (
           <div className="upload-container">
@@ -628,11 +636,7 @@ Please provide care recommendations considering these weather conditions.
             </div>
           </div>
 
-          <a href="#" className="analyze-another-btn" onClick={() => {
-            setPlantInfo(null);
-            setSelectedFile(null);
-            setPreviewUrl('');
-          }}>
+          <a href="#" className="analyze-another-btn" onClick={resetAnalysis}>
             Analyze Another Plant
           </a>
         </>
