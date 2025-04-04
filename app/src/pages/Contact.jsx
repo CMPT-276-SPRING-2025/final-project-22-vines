@@ -39,8 +39,8 @@ const ContactPage = () => {
     return (
         <div>
             <Navbar />
-            <div className="min-h-screen flex flex-col items-center justify-start pt-20 bg-gray-100 py-10">
-                <div className="bg-white p-8 rounded-lg shadow-lg max-w-4xl w-full">
+            <div className="min-h-screen flex flex-col items-center justify-start px-6 pt-20 bg-gray-100 py-10 max-w-[1240px] mx-auto">
+                <div className="bg-white p-8 rounded-2xl shadow-lg  w-full">
                     <h2 className="text-2xl font-bold text-center mb-4">Contact Us</h2>
                     <p className="text-gray-600 text-center mb-6">Any questions or remarks? Just write us a message!</p>
 
@@ -100,15 +100,15 @@ const ContactPage = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full mt-10">
                     <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="font-bold text-lg mb-2">User 1 (soon to come!)</h3>
+                        <h3 className="font-bold text-lg mb-2">User 1</h3>
                         <p className="text-gray-600">User review...</p>
                     </div>
                     <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="font-bold text-lg mb-2">User 2 (soon to come!)</h3>
+                        <h3 className="font-bold text-lg mb-2">User 2</h3>
                         <p className="text-gray-600">User review...</p>
                     </div>
                     <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="font-bold text-lg mb-2">User 3 (soon to come!)</h3>
+                        <h3 className="font-bold text-lg mb-2">User 3</h3>
                         <p className="text-gray-600">User review...</p>
                     </div>
                     {/* Add or edit user reviews as needed */}
