@@ -13,12 +13,12 @@ describe('FAQ Component', () => {
     render(<FAQ />);
 
     // verify FAQ
-    expect(screen.getByText('Question 1?')).toBeInTheDocument();
+    expect(screen.getByText("What if the weather doesn't display?")).toBeInTheDocument();
     expect(screen.getByText('Question 2?')).toBeInTheDocument();
     expect(screen.getByText('Question 3?')).toBeInTheDocument();
 
     // Find the answer text and its container.
-    const answer = screen.getByText('Answer to question 1...');
+    const answer = screen.getByText("If the webpage does not display the weather, please ensure that location access is granted and try uploading the photo again.");
     const answerContainer = answer.parentElement;
 
     // we check that initially the container has the "opacity-0" class.

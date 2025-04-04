@@ -100,15 +100,15 @@ const ContactPage = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full mt-10">
                     <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="font-bold text-lg mb-2">User 1</h3>
+                        <h3 className="font-bold text-lg mb-2">User 1 (soon to come!)</h3>
                         <p className="text-gray-600">User review...</p>
                     </div>
                     <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="font-bold text-lg mb-2">User 2</h3>
+                        <h3 className="font-bold text-lg mb-2">User 2 (soon to come!)</h3>
                         <p className="text-gray-600">User review...</p>
                     </div>
                     <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="font-bold text-lg mb-2">User 3</h3>
+                        <h3 className="font-bold text-lg mb-2">User 3 (soon to come!)</h3>
                         <p className="text-gray-600">User review...</p>
                     </div>
                     {/* Add or edit user reviews as needed */}
