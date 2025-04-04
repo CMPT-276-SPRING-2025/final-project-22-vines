@@ -6,7 +6,7 @@ const About = () => {
     return (
       <div className="bg-gray-100 min-h-screen">
         <Navbar />
-        <div className="md:text-center max-w-5xl mx-auto px-6 py-12">
+        <div className="md:text-center max-w-[1240px] mx-auto px-6 py-12">
             <div className="bg-white p-6 rounded-2xl shadow-lg mb-6">
                 <h2 className="text-2xl font-semibold text-gray-800">About Digital Garden</h2>
                 <p className="text-gray-600 mt-2">
