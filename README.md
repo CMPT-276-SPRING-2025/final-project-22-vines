@@ -45,3 +45,55 @@ The **Virtual Garden** application allows users to upload photos of their plants
 - **Health Diagnostics**: Upload images of plants showing symptoms, such as yellow spots, for a health assessment and how to import the current health status.
 - **Personalized Care Recommendations**: Get detailed care instructions based on plant species and current health status.
 - **Weather-based Care Adjustments**: Receive local weather data and forecasts to adjust plant care routines according to it.
+
+## Setup Instructions
+
+### Prerequisites
+- Node.js (prefer latest version)
+- npm (Node package manager)  
+Can be installed here:
+```
+https://nodejs.org/en/download
+```
+- Need API keys for:
+  - Google Gemini API
+    ```
+    https://aistudio.google.com/apikey
+    ```
+
+  - OpenWeatherMap API
+    ```
+    https://openweathermap.org/api
+    ```
+
+### Installation
+1. Clone the repository and navigate to the project directory
+   ```
+   git clone https://github.com/CMPT-276-SPRING-2025/final-project-22-vines.git
+   cd final-project-22-vines
+   ```
+
+2. Install dependencies
+   ```
+   cd app # Navigate to the 'app' directory
+   npm install
+   ```
+
+3. Set up environment variables (IMPORTANT)
+   - Create a `.env` file in the 'app' directory
+   
+   - Add your API keys:
+     ```
+     VITE_OPENWEATHER_API_KEY=your_gemini_api_key
+     VITE_GEMINI_API_KEY=your_open_weather_map_api_key
+     ```
+
+4. Start the development server
+   ```
+   npm run dev
+   ```
+
+5. Open your browser and navigate to `http://localhost:5173/` (Or the link it show on your Local) to view the application.
+
+
+
