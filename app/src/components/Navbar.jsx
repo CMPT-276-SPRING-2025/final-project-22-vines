@@ -12,24 +12,24 @@ const Navbar = ({ onReset }) => {
   };
 
   return (
-    <div className='flex justify-between items-center h-24 max-w-[1240px] mx-auto px-4 text-black'>
+    <div className='flex justify-between items-center h-24 max-w-[1240px] mx-auto px-6 text-black'>
       <h1 className='w-full text-4xl font-bold'>
         <Link to="/">Virtual Garden</Link>
       </h1>
       <ul className='flex'>
-        <li className='p-4 text-lg transition-all duration-300 text-black hover:text-green-600'>
+        <li className='p-4 font-medium text-lg transition-all duration-300 text-black hover:text-green-600'>
           <Link to="/About">About</Link>
         </li>
-        <li className='p-4 text-lg transition-all duration-300 text-black hover:text-green-600'>
+        <li className='p-4 font-medium text-lg transition-all duration-300 text-black hover:text-green-600'>
           <Link to="/FAQ">FAQ</Link>
         </li>
-        <li className='p-4 text-lg transition-all duration-300 text-black hover:text-green-600'>
+        <li className='p-4 font-medium text-lg transition-all duration-300 text-black hover:text-green-600'>
           <Link to="/Contact">Contact</Link>
         </li>
       </ul>
       <Link to="/Upload">
         <button
-          className='bg-green-600 text-white w-[175px] rounded-md font-medium my-6 mx-auto px-6 py-3 cursor-pointer hover:bg-green-700 transition duration-300'
+          className='bg-green-600 text-white w-[175px] rounded-md text-lg font-medium my-6 mx-auto px-6 py-3 cursor-pointer hover:bg-green-700 transition duration-300'
           onClick={handleButtonClick}
         >
           Analyze Plant
