@@ -9,8 +9,12 @@ const About = () => {
         <div className="bg-white p-6 rounded-2xl shadow-lg mb-6">
           <h2 className="text-2xl font-semibold text-gray-800">About Virtual Garden</h2>
           <p className="text-gray-600 mt-2">
-            Placeholder: Includes description of app, value to users, how to use, etc.
+            Virtual Garden is a web application designed to help plant owners identify and care for their plants. 
+            Using AI, we analyze your plant photos to provide accurate identification and health assessments.
+            The application also offers weather-based insights to help you adjust your care routine based on real-time climate data.
+
           </p>
+          
         </div>
         
         <div className="bg-white p-6 rounded-2xl shadow-lg mb-6">
@@ -22,7 +26,7 @@ const About = () => {
         </div>
 
         <div className="bg-white p-6 rounded-2xl shadow-lg mb-6">
-          <h2 className="text-2xl font-semibold text-gray-800">Meet the Team</h2>
+          <h2 className="text-2xl font-semibold text-gray-800">Who We Are</h2>
           <p className="text-gray-600 mt-2">
             We are a passionate group of developers and designers working on Virtual Garden to 
             make plant care easier for everyone.

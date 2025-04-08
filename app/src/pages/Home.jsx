@@ -85,9 +85,9 @@ const Home = () => {
             {/* Step 3 */}
             <div className="flex flex-col items-center">
               <div className="w-80 h-80 flex items-center justify-center">
-                <img src={Step3} alt="Receive Analytics" className="w-60" />
+                <img src={Step3} alt="Receive Insights" className="w-60" />
               </div>
-              <p className="text-lg font-medium">Receive Analytics</p>
+              <p className="text-lg font-medium">Receive Insights</p>
             </div>
           </div>
         </div>

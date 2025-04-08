@@ -17,13 +17,13 @@ const Navbar = ({ onReset }) => {
         <Link to="/">Virtual Garden</Link>
       </h1>
       <ul className='flex'>
-        <li className='p-4 transition-all duration-1000 text-black hover:text-green-600'>
+        <li className='p-4 text-lg transition-all duration-300 text-black hover:text-green-600'>
           <Link to="/About">About</Link>
         </li>
-        <li className='p-4 transition-all duration-1000 text-black hover:text-green-600'>
+        <li className='p-4 text-lg transition-all duration-300 text-black hover:text-green-600'>
           <Link to="/FAQ">FAQ</Link>
         </li>
-        <li className='p-4 transition-all duration-1000 text-black hover:text-green-600'>
+        <li className='p-4 text-lg transition-all duration-300 text-black hover:text-green-600'>
           <Link to="/Contact">Contact</Link>
         </li>
       </ul>
