@@ -14,8 +14,8 @@ describe('FAQ Component', () => {
 
     // verify FAQ
     expect(screen.getByText("What if the weather doesn't display?")).toBeInTheDocument();
-    expect(screen.getByText('Question 2?')).toBeInTheDocument();
-    expect(screen.getByText('Question 3?')).toBeInTheDocument();
+    expect(screen.getByText('Can I upload multiple plants in one photo?')).toBeInTheDocument();
+    expect(screen.getByText('Does the website store my plant data?')).toBeInTheDocument();
 
     // Find the answer text and its container.
     const answer = screen.getByText("If the webpage does not display the weather, please ensure that location access is granted and try uploading the photo again.");
