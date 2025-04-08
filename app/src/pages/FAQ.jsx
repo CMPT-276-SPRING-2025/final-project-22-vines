@@ -8,9 +8,9 @@ const FAQ = () => {
 
     const faqs = [
         { question: "What if the weather doesn't display?", answer: "If the webpage does not display the weather, please ensure that location access is granted and try uploading the photo again." },
-        { question: "Question 2?", answer: "Answer to question 2..." },
-        { question: "Question 3?", answer: "Answer to question 3..." }
-
+        { question: " Can I upload multiple plants in one photo?", answer: "It's recommended to upload one plant in one photo. If there are multiple plants, the AI may misidentify the species or provide inaccurate health information." },
+        { question: "Does the website store my plant data?", answer: "Sorry, we don't have the function yet. The data will be delete after you exist the analyze page." },
+        { question: "How often should I check the plant health updates?", answer: "You can check as often as you'd like! However, we suggest uploading a new photo every 1–2 weeks or after any major change in appearance to monitor your plant's condition." }
         /* Add or edit questions and answers as needed */
     ];
     
