@@ -95,8 +95,8 @@ const ContactPage = () => {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-[1240px] w-full mt-10">
                     <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h3 className="font-bold text-lg mb-2">Harman</h3>
-                        <p className="text-gray-600">sssss</p>
+                        <h3 className="font-bold text-lg mb-2">Anonymous</h3>
+                        <p className="text-gray-600">Very nicely designed application. Useful, would use myself.</p>
                     </div>
                     <div className="bg-white p-6 rounded-lg shadow-md">
                         <h3 className="font-bold text-lg mb-2">Nicole</h3>
