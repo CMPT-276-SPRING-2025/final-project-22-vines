@@ -9,7 +9,6 @@ const ContactPage = () => {
         email: "",
         message: "",
     });
-
     const [status, setStatus] = useState("");
 
     const handleChange = (e) => {
@@ -19,7 +18,6 @@ const ContactPage = () => {
     const sendEmail = (e) => {
         e.preventDefault();
         setStatus("Sending...");
-
         emailjs.sendForm(
             'service_0mr8xwn', // EmailJS service ID
             'template_1yvows1', // EmailJS template ID
@@ -37,13 +35,12 @@ const ContactPage = () => {
     };
 
     return (
-        <div>
+        <div className="bg-gray-100">
             <Navbar />
-            <div className="min-h-screen flex flex-col items-center justify-start px-6 pt-20 bg-gray-100 py-10 max-w-[1240px] mx-auto">
-                <div className="bg-white p-8 rounded-2xl shadow-lg  w-full">
+            <div className="flex flex-col items-center justify-start px-6 py-10 max-w-[1240px] mx-auto">
+                <div className="bg-white p-8 rounded-2xl shadow-lg w-full">
                     <h2 className="text-2xl font-bold text-center mb-4">Contact Us</h2>
                     <p className="text-gray-600 text-center mb-6">Any questions or remarks? Just write us a message!</p>
-
                     <form ref={form} onSubmit={sendEmail} className="space-y-4">
                         <div className="grid grid-cols-1 gap-4">
                             <div>
@@ -82,7 +79,7 @@ const ContactPage = () => {
                                 onChange={handleChange}
                                 placeholder="Enter your message"
                                 className="w-full border p-3 rounded-md bg-gray-100"
-                                rows="4"
+                                rows="3"
                                 required
                             />
                         </div>
@@ -90,14 +87,12 @@ const ContactPage = () => {
                             Submit
                         </button>
                     </form>
-
                     {status && (
                         <div className={`mt-4 p-3 rounded-md text-center ${status.includes("success") ? "bg-green-100 text-green-700" : status.includes("Failed") ? "bg-red-100 text-red-700" : "bg-blue-100 text-blue-700"}`}>
                             {status}
                         </div>
                     )}
                 </div>
-
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full mt-10">
                     <div className="bg-white p-6 rounded-lg shadow-md">
                         <h3 className="font-bold text-lg mb-2">Harman</h3>
@@ -111,7 +106,6 @@ const ContactPage = () => {
                         <h3 className="font-bold text-lg mb-2">Peter Xu</h3>
                         <p className="text-gray-600">I love this website, It saves my cactus</p>
                     </div>
-                    {/* Add or edit user reviews as needed */}
                 </div>
             </div>
         </div>
