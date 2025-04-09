@@ -1,6 +1,14 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 
+/**
+ * About Component
+ * 
+ * This component renders the About page for Virtual Garden application.
+ * It displays information about the application's purpose, mission statement,
+ * and team information using a clean card-based layout.
+ */
+
 const About = () => {
   return (
     <div className="bg-gray-100">
@@ -12,7 +20,7 @@ const About = () => {
             Virtual Garden is a web application designed to help plant owners identify and care for their plants. 
             Using AI, we analyze your plant photos to provide accurate identification and health assessments.
             The application also offers weather-based insights to help you adjust your care routine based on real-time climate data.
-
+            {/*These text can be change as requirements*/}
           </p>
           
         </div>

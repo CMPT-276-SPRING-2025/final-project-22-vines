@@ -1,6 +1,12 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
+/**
+* Navbar Component
+* 
+* This component renders the navigation bar that appears at the top of each page.
+*/
+
 const Navbar = ({ onReset }) => {
   const location = useLocation();
 

@@ -1,6 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+/**
+ * Footer Component
+ * 
+ * This component renders the site-wide footer that appears at the bottom of every page.
+ */
+
 const Footer = () => {
   return (
     <footer className="bg-gray-900 text-white mt-auto">

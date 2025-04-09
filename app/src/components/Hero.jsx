@@ -2,6 +2,12 @@ import React from 'react';
 import HeroPlant from '../assets/hero-plant.png';
 import { Link } from 'react-router-dom';
 
+/**
+* Hero Component
+* 
+* This component renders the main hero section on the homepage with a call-to-action.
+*/
+
 function Hero() {
   return (
     <div className="text-black w-full bg-[#E2FFDB] px-4">

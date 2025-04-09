@@ -2,10 +2,17 @@ import Navbar from '../components/Navbar';
 import React from 'react';
 import { useState } from 'react';
 
+/**
+ * FAQ Component
+ * 
+ * This component renders a Frequently Asked Questions page with expandable/collapsible
+ * question and answer sections.
+ */
+
 const FAQ = () => {
-
+    // State to track which FAQ item is currently open
     const [openIndex, setOpenIndex] = useState(null);
-
+    // Array of FAQ objects containing questions and answers
     const faqs = [
         { question: "What if the weather doesn't display?", answer: "If the webpage does not display the weather, please ensure that location access is granted and try uploading the photo again." },
         { question: "Can I upload multiple plants in one photo?", answer: "It's recommended to upload one plant per photo. If there are multiple plants, the AI may misidentify the species or provide inaccurate health information." },
@@ -16,6 +23,11 @@ const FAQ = () => {
         /* Add or edit questions and answers as needed */
     ];
     
+    /**
+     * Toggles the visibility of an answer based on its index
+     * If the clicked item is already open, it closes it
+     * If another item is clicked, it closes the previous one and opens the new one
+     */
     const toggleAnswer = (index) => {
     setOpenIndex(openIndex === index ? null : index);
 };
@@ -23,8 +35,10 @@ const FAQ = () => {
 return (
     <div>
         <Navbar />
+        {/* Main content container */}
         <div className="max-w-[1240px] mx-auto p-6">
             <h2 className="text-2xl font-bold text-center mb-6 ">Frequently Asked Questions</h2>
+            {/* FAQ container*/}
             <div className="bg-white p-6 rounded-2xl shadow-lg mb-6">
                 {faqs.map((faq, index) => (
                     <div key={index} className="p-4">
@@ -43,6 +57,7 @@ return (
                             <p className="text-gray-600 mb-4">{faq.answer}</p>
                         </div>
 
+                        {/* Horizontal divider between FAQ items*/}
                         {index < faqs.length - 1 && <hr className="border-gray-300 my-6" />}
                     </div>
                 ))}

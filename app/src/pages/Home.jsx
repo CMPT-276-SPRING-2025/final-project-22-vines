@@ -9,6 +9,13 @@ import Step1 from '../assets/Step1.png';
 import Step2 from '../assets/Step2.png';
 import Step3 from '../assets/Step3.png';
 
+/**
+ * Homepage Component
+ * 
+ * This component renders a homepage to show user the basic of the website.
+ * Displays key features, a step-by-step guide, and a call to action.
+ */
+
 const Home = () => {
   return (
     <div>

@@ -1,4 +1,5 @@
 /* Upload.css */
+/* Main container styling for the upload page */
 .upload-page {
   max-width: 1240px;
   margin: 0 auto;
@@ -6,8 +7,6 @@
   font-family: 'Inter', sans-serif;
   font-size: 16px;
 }
-
-
 
 .upload-container {
   background: white;

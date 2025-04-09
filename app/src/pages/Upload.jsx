@@ -2,13 +2,20 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import "./Upload.css";
 
+/**
+ * UploadPage Component
+ * 
+ * This component renders a contact form page that allows users to upload image and analysis result.
+ * using Genmini, Geolocation and OpenweatherMap API to Implementing functions.
+ */
+
 console.log("Environment Variables:", import.meta.env); // Debugging environment variables
 
 const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 const GEMINI_API_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
 
-// Base plant prompt remains unchanged
+// Base plant prompt
 const BASE_PLANT_PROMPT = `
 Identify the plant species, analyze its health, and provide care recommendations.
 If the image is not of a plant, return JSON with an "error" field.
@@ -49,17 +56,21 @@ Return JSON with these fields:
 `;
 
 const Upload = () => {
-  // All state variables remain unchanged
+  // State for file handling and preview
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  // State for weather data
   const [currentWeather, setCurrentWeather] = useState(null);
   const [forecast, setForecast] = useState([]);
+  // State for plant analysis
   const [plantInfo, setPlantInfo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
 
-  // All functions remain unchanged
+  /**
+   * Fetches weather data based on user's geolocation
+   */
   const getWeatherData = () => {
     return new Promise((resolve, reject) => {
       if (navigator.geolocation) {
@@ -82,6 +93,7 @@ const Upload = () => {
     });
   };
 
+  // Fetch weather data on component mount
   useEffect(() => {
     getWeatherData()
       .then((data) => {
@@ -94,9 +106,9 @@ const Upload = () => {
           date: new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
         });
 
+        // Process forecast for next 4 days
         const forecastDays = [];
         
-        // Get one forecast per day for the next 4 days
         for (let i = 0; i < 4; i++) {
           const index = i * 8 + 8; 
           if (data.list[index]) {
@@ -120,6 +132,10 @@ const Upload = () => {
       });
   }, []);
 
+
+   /**
+   * Maps weather condition to emoji icon
+   */
   const getWeatherIcon = (condition) => {
     if (!condition) {
       return '☁️'; // Return a default icon if the condition is undefined
@@ -138,12 +154,18 @@ const Upload = () => {
     }
   };
 
+  /**
+   * Resets the analysis state to start over
+   */
   const resetAnalysis = () => {
     setPlantInfo(null);
     setSelectedFile(null);
     setPreviewUrl('');
   };
 
+  /**
+   * Handles file selection and validates file type and size
+   */
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (!file) {
@@ -155,7 +177,8 @@ const Upload = () => {
       type: file.type,
       size: file.size
     });
-  
+
+    // Validate file type
     const allowedTypes = [
       "image/png",
       "image/jpeg", 
@@ -178,6 +201,7 @@ const Upload = () => {
       return;
     }
 
+    // Validate file size (5MB max)
     const maxSizeBytes = 5 * 1024 * 1024; // 5MB
     if (file.size > maxSizeBytes) {
       setErrorMessage(`File is too large. Maximum file size is 5MB.`);
@@ -187,6 +211,7 @@ const Upload = () => {
       return;
     }
 
+    // File is valid, create preview
     setErrorMessage('');
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -196,6 +221,9 @@ const Upload = () => {
     reader.readAsDataURL(file);
   };
 
+  /**
+   * Handles drag over event for drag-and-drop functionality
+   */
   const handleDragOver = (event) => {
     if (event.target.closest('.upload-area')) {
       event.preventDefault();
@@ -203,6 +231,9 @@ const Upload = () => {
     }
   };
 
+  /**
+   * Handles drop event for drag-and-drop functionality
+   */
   const handleDrop = (event) => {
     if (event.target.closest('.upload-area')) {
       event.preventDefault();
@@ -215,6 +246,10 @@ const Upload = () => {
     }
   };
 
+  /**
+   * Main function to identify plant from uploaded image
+   * Uses Gemini API to analyze the plant and combines with weather data
+   */
   const handleIdentify = () => {
     if (!selectedFile) {
       alert("Please select an image");
@@ -233,8 +268,10 @@ const Upload = () => {
       setAnalysisProgress(progress);
     }, 300);
 
+    // Get weather data for context-aware plant care
     getWeatherData()
       .then((data) => {
+        // Format weather for API prompt
         const current = data.list[0];
         const currentWeatherStr = `Current weather: ${current.weather[0].description}, Temp: ${current.main.temp}°C, Humidity: ${current.main.humidity}%`;
 
@@ -256,13 +293,13 @@ Forecast for next 4 days:
 ${forecastSummary}
 Please provide care recommendations considering these weather conditions.
         `;
-
+        // Read file as base64 for API
         const fullPrompt = BASE_PLANT_PROMPT + weatherInfo;
 
         const reader = new FileReader();
         reader.onload = (e) => {
           const base64Image = e.target.result.split(",")[1];
-
+          // Prepare payload for Gemini API
           const payload = {
             contents: [
               {
@@ -278,7 +315,7 @@ Please provide care recommendations considering these weather conditions.
               },
             ],
           };
-
+          // Call Gemini API for plant analysis
           try {
             fetch(`${GEMINI_API_ENDPOINT}?key=${GOOGLE_API_KEY}`, {
               method: "POST",
