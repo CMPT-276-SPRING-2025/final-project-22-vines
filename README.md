@@ -96,10 +96,10 @@ https://nodejs.org/en/download
 5. Open your browser and navigate to `http://localhost:5173/` (Or the link it show on your Local) to view the application.
 
 ## Links
-**Deployed Website:** [Link](https://demo-deploy-for-vine-22.onrender.com/)
-**Report:** [Link](https://docs.google.com/document/d/1GL3276joFisV9jS36vXO0D_JSRjekVRspwKewqxtKfI/edit?usp=sharing)
-**Demo Video:** [Link](https://youtu.be/-yDqJ07jOX8)
-**Video Presentation:** [Link](https://youtu.be/lThqun9LhFY)
+**Deployed Website:** [Link](https://demo-deploy-for-vine-22.onrender.com/)  
+**Report:** [Link](https://docs.google.com/document/d/1GL3276joFisV9jS36vXO0D_JSRjekVRspwKewqxtKfI/edit?usp=sharing)  
+**Demo Video:** [Link](https://youtu.be/-yDqJ07jOX8)  
+**Video Presentation:** [Link](https://youtu.be/lThqun9LhFY)  
 
 
 
