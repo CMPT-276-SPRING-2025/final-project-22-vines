@@ -12,7 +12,7 @@ import Step3 from '../assets/Step3.png';
 /**
  * Homepage Component
  * 
- * This component renders a homepage to show user the basic of the website.
+ * This component renders a homepage to give users an overview of the website.
  * Displays key features, a step-by-step guide, and a call to action.
  */
 
@@ -25,7 +25,7 @@ const Home = () => {
       {/* First Feature Section */}
       <div className="py-12">
         <div className="max-w-[1240px] mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-8 px-6">
-          {/* Image */}
+          {/* Image with Overlay */}
           <div className="relative">
             <img src={FeatureImage1} alt="Another App Feature" className="w-7/8 rounded-2xl shadow-lg" />
             <img
@@ -59,7 +59,7 @@ const Home = () => {
             </p>
           </div>
 
-          {/* Image with Overlay */}
+          {/* Image */}
           <div className="relative">
             <img src={FeatureImage} alt="Another App Feature" className="w-7/8 rounded-lg shadow-lg mx-auto" />
           </div>

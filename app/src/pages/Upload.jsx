@@ -6,7 +6,7 @@ import "./Upload.css";
  * UploadPage Component
  * 
  * This component renders a contact form page that allows users to upload image and analysis result.
- * using Genmini, Geolocation and OpenweatherMap API to Implementing functions.
+ * using Gemini, Geolocation and OpenweatherMap API to Implementing functions.
  */
 
 console.log("Environment Variables:", import.meta.env); // Debugging environment variables

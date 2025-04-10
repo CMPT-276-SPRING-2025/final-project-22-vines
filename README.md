@@ -1,6 +1,6 @@
 22 VINES
 
-Group Memebers:  
+Group Members:  
  - Sadhika Huria  
  - Nathan Fassler  
  - Junhao Xu (Peter)  

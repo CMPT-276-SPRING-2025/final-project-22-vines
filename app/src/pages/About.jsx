@@ -20,7 +20,6 @@ const About = () => {
             Virtual Garden is a web application designed to help plant owners identify and care for their plants. 
             Using AI, we analyze your plant photos to provide accurate identification and health assessments.
             The application also offers weather-based insights to help you adjust your care routine based on real-time climate data.
-            {/*These text can be change as requirements*/}
           </p>
           
         </div>

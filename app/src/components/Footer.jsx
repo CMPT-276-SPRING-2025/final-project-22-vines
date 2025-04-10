@@ -39,15 +39,10 @@ const Footer = () => {
                       FAQ
                     </Link>
                   </li>
-                  {/* <li>
-                    <Link to="/Contact" className="hover:text-green-400 transition-colors">
-                      Contact
-                    </Link>
-                  </li> */}
                 </ul>
               </div>
 
-              {/* Think about something to add here later */}
+              {/* User Email Subscription Section */}
               <div>
                 <h3 className="text-lg font-semibold mb-2">Subscribe to stay updated!</h3>
                 <form className="flex flex-col space-y-2">
